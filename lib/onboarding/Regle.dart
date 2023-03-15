@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:songhogame/modejeu/TwoPlayers.dart';
+import 'package:songhogame/views/Start.dart';
 
 class Regle extends StatefulWidget {
   const Regle({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _RegleState extends State<Regle> {
               DeviceOrientation.landscapeRight,
             ]);
             Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const TwoPlayers()),
+                MaterialPageRoute(builder: (context) =>  Start()),
                     (route) => false);
           },
         ),

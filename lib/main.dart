@@ -3,19 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:songhogame/views/Start.dart';
 
 void main() {
-  //screen orientation
-  WidgetsFlutterBinding.ensureInitialized();
-  // Step 3
-  SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
-  ]).then((value) =>  runApp(const MyApp()));
-  // runApp(const MyApp());
+  ]);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -26,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const  Start()
+      home: Start(),
     );
   }
 }
