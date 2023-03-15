@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:songhogame/views/Start.dart';
+import 'package:songhogame/modejeu/TwoPlayers.dart';
 
 class Regle extends StatefulWidget {
   const Regle({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _RegleState extends State<Regle> {
               DeviceOrientation.landscapeRight,
             ]);
             Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const Start()),
+                MaterialPageRoute(builder: (context) => const TwoPlayers()),
                     (route) => false);
           },
         ),
@@ -42,6 +42,11 @@ class _RegleState extends State<Regle> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  "Le but du jeu Le but du jeu est de s'emparer d'un maximum de graines. Le joueur qui a le plus de graines à la fin de la partie l'emporte.",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                SizedBox(height: 10),
                 Text(
                   "La distribution est l'operation qui consiste a prendre la totalites des billes presentes dans un trou de son camp et a les disposer une " +
             "a une dans les cases qui le suivent dans l'ordre inverse des aiguilles d'une montre.(on peut donc distrubuer aussi dans les cases de "
@@ -84,8 +89,11 @@ class _RegleState extends State<Regle> {
                   style: TextStyle(fontSize: 18.0),
                 ),
                 SizedBox(height: 10),
-                Text("Le jeu se termine lorsq'un joueur n'a plus de graines dans son camp et ne peut donc plus jouer L'adversaire capture "
-                    + " alors les graines restantes.	",
+                Text("Si le nombre de pierre pris par l’un des joueurs est supérieur à 35, il gagne;",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                SizedBox(height: 10),
+                Text(" Si le nombre de pierre des deux  joueurs, en excluant les prises, est inférieuré à 10, le gagnant est celui qui a la somme des ses prises et du nombre des pierres de son côté, supérieur à 35.",
                   style: TextStyle(fontSize: 18.0),
                 ),
                 SizedBox(height: 10),

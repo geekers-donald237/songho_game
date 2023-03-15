@@ -1,9 +1,7 @@
 import 'dart:core';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
 import 'Regle.dart';
 
 class Start extends StatefulWidget {
@@ -31,8 +29,9 @@ class _StartState extends State<Start> {
   Color? color = Colors.grey[300];
   int statut_joueur = 1;
   int gagnant = -1;
-  bool _isDistributed = false;
-
+  String winner = "" ;
+  String messageSuccess = "";
+  int cpt1 = 0 , cpt2 = 0;
 
   void _onTap(int index) {
     setState(() {
@@ -78,7 +77,6 @@ class _StartState extends State<Start> {
     );
   }
 
-
   Widget _buildCell(int index) {
     return GestureDetector(
       onTap: () {
@@ -102,8 +100,7 @@ class _StartState extends State<Start> {
 
   }
 
-
-  Widget _player(String nom_player , int score){
+  Widget _player(String nomPlayer , int score){
     return Container(
       width: 110,
       height: 45,
@@ -118,7 +115,7 @@ class _StartState extends State<Start> {
               children: [
                 Icon(Icons.people),
                 Text(' '),
-                Text(nom_player),
+                Text(nomPlayer),
                 Text('',style: TextStyle(fontSize: 14),),
               ],
             ),
@@ -129,27 +126,30 @@ class _StartState extends State<Start> {
     );
   }
 
-  int _jeu_est_fini() {
-    for (int i = 6; i >= 0; i--){
-      if (_board[i] == 0) {
-        gagnant = 1;
-      }
-    }
-
-    for (int i = 7; i <= 13; i++){
-      if (_board[i] == 0) {
-        gagnant = 2;
-      }
-    }
-    return gagnant;
-  }
-
   @override
-
-
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Jeu de Songho')),
+      appBar: AppBar(title: const Center(child: Text('Jeu de Songho')),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.live_help_outlined) ,onPressed:() {
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+            ]);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const Regle()),
+                    (route) => false);
+          },
+          ),
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+
+            },
+          ),
+        ],
+      ),
       drawer: Drawer(
           child: SingleChildScrollView(
             child: SafeArea(
@@ -161,7 +161,8 @@ class _StartState extends State<Start> {
                     childrenPadding: EdgeInsets.only(left:60),
                     children: [
                       ListTile(
-                        title: Text("Nouvelle Partie"),
+                        leading: Icon(Icons.cached_outlined),
+                        title: Text("Recommencer"),
                         onTap: (){
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (context) => const Start()),
@@ -169,12 +170,14 @@ class _StartState extends State<Start> {
                         },
                       ),
                       ListTile(
+                        leading: Icon(Icons.table_rows_outlined),
                         title: Text("Score"),
                         onTap: (){
 
                         },
                       ),
                       ListTile(
+                        leading: Icon(Icons.exit_to_app),
                         title: Text('Fermer'),
                         onTap: (){
                           SystemNavigator.pop();
@@ -188,46 +191,19 @@ class _StartState extends State<Start> {
                     childrenPadding: EdgeInsets.only(left:60),
                     children: [
                       ListTile(
-                        title: Text("Joueur"),
-                        onTap: (){
-                        },
-                      ),
-                      ListTile(
+                        leading: Icon(Icons.layers_outlined),
                         title: Text('Niveau'),
                         onTap: (){
                         },
                       ),
                       ListTile(
+                        leading: Icon(Icons.sign_language_outlined),
                         title: Text('Statut'),
                         onTap: (){
                         },
                       ),
                     ],
                   ),
-                  ExpansionTile(
-                    title: Text("A Propos"),
-                    // leading: Icon(),
-                    childrenPadding: EdgeInsets.only(left:60),
-                    children: [
-                      ListTile(
-                        title: Text("Principe Du Jeu"),
-                        onTap: (){
-                          SystemChrome.setPreferredOrientations([
-                            DeviceOrientation.portraitUp,
-                            DeviceOrientation.portraitDown,
-                          ]);
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) => const Regle()),
-                                  (route) => false);
-                        },
-                      ),
-                      ListTile(
-                        title: Text('A Propos de notre Jeu du songho'),
-                        onTap: (){
-                        },
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
@@ -282,7 +258,22 @@ class _StartState extends State<Start> {
     );
   }
 
+  void _WinnerSms(String sms){
+    showDialog( context: context, builder: (BuildContext context) {
+      return AlertDialog( title: Text('Successs !'), content: Text(sms),
+        actions: <Widget>[ FloatingActionButton( child: Text('OK'), onPressed: ()  {
+          Navigator.of(context).pop();
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const Start()),
+                  (route) => false);
 
+        },
+        ),
+        ],
+      );
+    },
+    );
+  }
 
   Future<void> _distributePawns(int index) async {
     int pawns = _board[index];
@@ -294,21 +285,91 @@ class _StartState extends State<Start> {
       if (currentIndex != index) {
         _board[currentIndex]++;
         pawns--;
-        await Future.delayed(const Duration(milliseconds: 500));
-        _board[currentIndex];
+        await Future.delayed(const Duration(milliseconds: 300));
       }
+      setState(() {
+
+      });
+
     }
 
     while(_board[currentIndex] == 2 || _board[currentIndex] == 3){
-      if(statuts == "J2"){
-        score1 = score1 +  _board[currentIndex];
-      }else {
-        score2 = score2 +  _board[currentIndex];
-      }
-      _board[currentIndex] = 0;
+      setState(() {
+        if(statuts == "J2"){
+          score1 = score1 +  _board[currentIndex];
+        }else {
+          score2 = score2 +  _board[currentIndex];
+        }
+        _board[currentIndex] = 0;
+      });
       currentIndex--;
+      await Future.delayed(const Duration(milliseconds: 200));
+    }
+
+    setState(() {
+     if(score1 >= 35 && score2 < 35){
+       messageSuccess = "Victoire Joueur 1";
+       _WinnerSms(messageSuccess);
+     }if(score1 < 35 && score2 >= 35) {
+       messageSuccess = "Victoire Joueur 2";
+       _WinnerSms(messageSuccess);
+     }
+
+     for (int i = 6; i >= 0; i--){
+       if(_board[i] != 0){
+         cpt1++;
+       }
+     }
+
+      for (int i = 7; i <= 13; i++){
+        if(_board[i] != 0){
+          cpt2++;
+        }
+      }
+    });
+
+    setState(() {
+      if(35 - (score2 + score1) < 10){
+        if((score1 + cpt1) > 35){
+          messageSuccess = "Victoire Joueur 1";
+          _WinnerSms(messageSuccess);
+        }if((score2 + cpt2) > 35){
+          messageSuccess = "Victoire Joueur 2";
+          _WinnerSms(messageSuccess);
+        }
+      }
+    });
+
+    await Future.delayed(const Duration(milliseconds: 200));
+    await _computerDistributePawns();
+  }
+
+  Future<void> _computerDistributePawns() async {
+    int maxPawns = 0;
+    int maxPawnsIndex = 0;
+    // Find the cell with the maximum number of pawns for the computer
+    for (int i = 7; i < 14; i++) {
+      if (_board[i] > maxPawns) {
+        maxPawns = _board[i];
+        maxPawnsIndex = i;
+      }
+    }
+    // Distribute the pawns for the computer
+    int pawns = _board[maxPawnsIndex];
+    _board[maxPawnsIndex] = 0;
+    int currentIndex = maxPawnsIndex;
+    while (pawns > 0) {
+      currentIndex = (currentIndex + 1) % 14;
+      if (currentIndex != maxPawnsIndex && currentIndex < 7) {
+        _board[currentIndex]++;
+        pawns--;
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+      setState(() {});
     }
   }
+
+
 }
 
 
