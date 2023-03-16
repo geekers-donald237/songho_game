@@ -1,18 +1,23 @@
-import 'dart:core';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../views/Start.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:songhogame/views/Start.dart';
 
-class TwoPlayers extends StatefulWidget {
-  const TwoPlayers({Key? key}) : super(key: key);
+class OnePlayers extends StatefulWidget {
+  const OnePlayers({Key? key}) : super(key: key);
+
   @override
-  State<TwoPlayers> createState() => _TwoPlayersState();
+  State<OnePlayers> createState() => _OnePlayersState();
 }
 
-class _TwoPlayersState extends State<TwoPlayers> {
+
+class _OnePlayersState extends State<OnePlayers> {
+
   late List<int> _board;
   late List<Color> _colorList;
+
   @override
   void initState() {
     super.initState();
@@ -21,18 +26,20 @@ class _TwoPlayersState extends State<TwoPlayers> {
     _colorList = List<Color>.generate(14, (index) => Colors.grey[300]!);
   }
 
-  int score1 = 0;
-  int score2 = 0;
-  String message = "Joueur 1 a vous de commencer";
-  String statuts = "J1";
-  int statut_joueur = 1;
+
+  int scorePlayer = 0;
+  int scoreComputer = 0;
+  String message = "A vous de commencer";
+  String statuts = "Player";
   int gagnant = -1;
   String winner = "";
   String messageSuccess = "";
-  int cpt1 = 0, cpt2 = 0;
+  int cpt1 = 0,
+      cpt2 = 0;
   bool _jeuEstEnCours = false;
 
-  Widget _buildCell(int index, Color color) {
+
+  Widget _buildCell(int index, Color color){
     return GestureDetector(
       onTap: () {
         _onTap(index);
@@ -70,10 +77,7 @@ class _TwoPlayersState extends State<TwoPlayers> {
                 Icon(Icons.people),
                 Text(' '),
                 Text(nomPlayer),
-                Text(
-                  '',
-                  style: TextStyle(fontSize: 14),
-                ),
+                Text('', style: TextStyle(fontSize: 14),),
               ],
             ),
           ),
@@ -83,12 +87,9 @@ class _TwoPlayersState extends State<TwoPlayers> {
     );
   }
 
-  @override
   Widget build(BuildContext context) {
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Jeu de Songho')),
+      appBar: AppBar(title: const Center(child: Text('Jeu de Songho')),
       ),
       drawer: Drawer(
         child: ListView(
@@ -126,16 +127,17 @@ class _TwoPlayersState extends State<TwoPlayers> {
                 );
                 Future.delayed(Duration(seconds: 2), () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => const TwoPlayers()),
-                          (route) => false);
+                      MaterialPageRoute(builder: (context) => const OnePlayers()),
+                          (route) => false
+                  );
                 });
               },
+
             ),
             ListTile(
               leading: Icon(Icons.home),
               title: Text("Acceuil"),
-              onTap: () {
+              onTap: (){
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -148,7 +150,8 @@ class _TwoPlayersState extends State<TwoPlayers> {
                 Future.delayed(Duration(seconds: 1), () {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => Start()),
-                          (route) => false);
+                          (route) => false
+                  );
                 });
               },
             ),
@@ -156,16 +159,18 @@ class _TwoPlayersState extends State<TwoPlayers> {
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Fermer'),
-              onTap: () {
+              onTap: (){
                 SystemNavigator.pop();
               },
             ),
             Container(
               alignment: Alignment.bottomCenter,
-              child: ListTile(
+              child:
+              ListTile(
                 leading: Icon(Icons.info_outline),
                 title: Text('A propos de notre jeu de songho '),
               ),
+
             ),
           ],
         ),
@@ -174,17 +179,15 @@ class _TwoPlayersState extends State<TwoPlayers> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _player('Player 1', score1),
+                    _player('You ', scorePlayer),
                     Text(message),
-                    _player('Player 2', score2)
+                    _player('Computer', scoreComputer)
                   ],
                 ),
               ),
@@ -215,11 +218,10 @@ class _TwoPlayersState extends State<TwoPlayers> {
                             ),
                           ],
                         ),
-                    ]),
+                    ]
+                ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20,),
             ],
           ),
         ),
@@ -228,131 +230,59 @@ class _TwoPlayersState extends State<TwoPlayers> {
   }
 
   void _WinnerSms(String sms) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Successs !'),
-          content: Text(sms),
-          actions: <Widget>[
-            FloatingActionButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const TwoPlayers()),
-                        (route) => false);
-              },
-            ),
-          ],
-        );
-      },
+    showDialog(context: context,barrierDismissible: false, builder: (BuildContext context) {
+      return AlertDialog(title: Text('Successs !'), content: Text(sms),
+        actions: <Widget>[
+          FloatingActionButton(child: Text('OK'), onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const OnePlayers()),
+                    (route) => false);
+          },
+          ),
+        ],
+      );
+    },
     );
   }
+
 
   void _onTap(int index) {
     setState(() {
       if(_jeuEstEnCours == false){
-        if(statuts == "J1") {
-          if (index >= 0 && index <= 6) {
-            statut_joueur = 0;
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Erreur'),
-                  content: Text('Cette case ne vous appartient pas.'),
-                  actions: <Widget>[
-                    FloatingActionButton(
-                      child: Text('OK'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          } else {
-            if (_board[index] != 0) {
-              _distributePawns(index);
-             setState(() {
-               message = "Patientez J2.....";
-               statuts = "J2";
-             });
-            } else {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Erreur'),
-                    content: Text('Selectionner une case contenant des pions'),
-                    actions: <Widget>[
-                      FloatingActionButton(
-                        child: Text('OK'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
+        if (index >= 0 && index <= 6) {
+          showDialog(context: context, barrierDismissible: false, builder: (BuildContext context) {
+            return AlertDialog(title: Text('Erreur'),
+              content: Text('Cette case ne vous appartient pas.'),
+              actions: <Widget>[
+                FloatingActionButton(child: Text('OK'), onPressed: () {
+                  Navigator.of(context).pop();
                 },
+                ),
+              ],
+            );
+          },
+          );
+        } else {
+          if (_board[index] != 0) {
+            message = "Vous Jouez..... ";
+            _distributePawns(index);
+          }else {
+            showDialog( context: context, barrierDismissible: false, builder: (BuildContext context) {
+              return AlertDialog( title: Text('Erreur'),
+                content: Text('Selectionner une case contenant des pions'),
+                actions: <Widget>[ FloatingActionButton( child: Text('OK'), onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                ),
+                ],
               );
-            }
+            },
+            );
           }
-        }else {
-      statut_joueur = 0;
-      if (index >= 7 && index <= 13) {
-      showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-      return AlertDialog(
-      title: Text('Erreur'),
-      content: Text('Cette case ne vous appartient pas.'),
-      actions: <Widget>[
-      FloatingActionButton(
-      child: Text('OK'),
-      onPressed: () {
-      Navigator.of(context).pop();
-      },
-      ),
-      ],
-      );
-      },
-      );
-      } else {
-      if (_board[index] != 0) {
-      _distributePawns(index);
-      setState(() {
-        message = "Patienter J1...";
-        statuts = "J1";
-      });
-      } else {
-      showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-      return AlertDialog(
-      title: Text('Erreur'),
-      content: Text('Selectionner une case contenant des pions'),
-      actions: <Widget>[
-      FloatingActionButton(
-      child: Text('OK'),
-      onPressed: () {
-      Navigator.of(context).pop();
-      },
-      ),
-      ],
-      );
-      },
-      );
-      }
-      }
-      }
+
+        }
+
       }else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content:
@@ -362,24 +292,25 @@ class _TwoPlayersState extends State<TwoPlayers> {
           padding: const EdgeInsets.all(15.0),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
-              behavior: SnackBarBehavior.floating,
-              width: 300,
+          behavior: SnackBarBehavior.floating,
+          width: 300,
         ),);
       }
     });
   }
+
 
   Future<void> _distributePawns(int index) async {
     int pawns = _board[index];
     _board[index] = 0;
     int currentIndex = index;
     //distribuer les pions dans le sens inverse des aiguilles d'une montre
-    while (pawns > 0){
+    while (pawns > 0) {
       currentIndex = (currentIndex + 1) % 14;
       final player = AudioCache();
       player.play('distri.wav');
-      if (currentIndex != index){
-        setState((){
+      if (currentIndex != index) {
+        setState(() {
           _colorList[currentIndex] = Colors.grey[300]!;
           _colorList[currentIndex] = Colors.blue;
           _board[currentIndex]++;
@@ -397,9 +328,9 @@ class _TwoPlayersState extends State<TwoPlayers> {
     while (_board[currentIndex] >= 2 && _board[currentIndex] <= 4){
       setState((){
         if (statuts == "J2") {
-          score1 = score1 + _board[currentIndex];
+          scorePlayer = scorePlayer + _board[currentIndex];
         }else{
-          score2 = score2 + _board[currentIndex];
+          scoreComputer = scoreComputer + _board[currentIndex];
         }
         final player = AudioCache();
         player.play('prise.mp3');
@@ -413,51 +344,106 @@ class _TwoPlayersState extends State<TwoPlayers> {
     }
 
     setState(() {
-      _jeuEstEnCours = false;
+      message = "patientez....,L'ordinateur joue";
     });
+    await Future.delayed(const Duration(milliseconds: 1000));
+    _computerDistributePawns();
 
-    setState((){
-      if(statuts == "J1"){
-        message = "A vous de Jouer joueur 1";
-      }else{
-        message = "A vous de Jouer joueur 2";
-      }
-    });
+  }
 
-    //verif pour le score deja
-    setState(() {
-      if(score1 >= 35 && score2 < 35) {
-        messageSuccess = "Victoire J1";
-        _WinnerSms(messageSuccess);
-      }
-      if (score1 < 35 && score2 >= 35) {
-        messageSuccess = "Victoire  J2";
-        _WinnerSms(messageSuccess);
-      }
-    });
-
-      //Vicoire en fonction du nombre de pierres de son cote
-      setState(() {
-      for (int i = 6; i >= 0; i--) {
-        if (_board[i] != 0) {
-          cpt1 = cpt1 + _board[i];
+  Future<void> _computerDistributePawns()async {
+        int computerMoveIndex = Random().nextInt(7);
+        while(_board[computerMoveIndex] == 0){
+          computerMoveIndex = Random().nextInt(7);
         }
-      }
+        int computerMovePawns = _board[computerMoveIndex];
+        _board[computerMoveIndex] = 0;
+        int currentComputerIndex = computerMoveIndex;
+        //distribuer les pions dans le sens inverse des aiguilles d'une montre
+        while (computerMovePawns > 0) {
+          final player = AudioCache();
+          player.play('distri.wav');
+          currentComputerIndex = (currentComputerIndex + 1) % 14;
+          if (currentComputerIndex != computerMoveIndex) {
+           setState(() {
+             _colorList[currentComputerIndex] = Colors.grey[300]!;
+             _colorList[currentComputerIndex] = Colors.blue;
+             _jeuEstEnCours = true;
+             _board[currentComputerIndex]++;
+             computerMovePawns--;
+           });
+            await Future.delayed(const Duration(milliseconds: 1500));
+          }
 
-      for (int i = 7; i <= 13; i++) {
-        if (_board[i] != 0) {
-          cpt2 + _board[i];
+          setState(() {
+            _colorList[currentComputerIndex] = Colors.blue;
+            _colorList[currentComputerIndex] = Colors.grey[300]!;
+          });
+
         }
-      }
-      if (70 - (score2 + score1) < 10) {
-        if ((score1 + cpt1) > 35) {
-          messageSuccess = "Victoire  J1";
-          _WinnerSms(messageSuccess);
-        }else if ((score2 + cpt2) > 35) {
-          messageSuccess = "Victoire J2";
-          _WinnerSms(messageSuccess);
+
+        while (_board[currentComputerIndex] >= 2 && _board[currentComputerIndex] <= 4){
+          setState((){
+            if (statuts == "J2") {
+              scorePlayer = scorePlayer + _board[currentComputerIndex];
+            }else{
+              scoreComputer = scoreComputer + _board[currentComputerIndex];
+            }
+            final player = AudioCache();
+            player.play('prise.mp3');
+            _board[currentComputerIndex] = 0;
+          });
+          await Future.delayed(const Duration(milliseconds: 1500));
+          if(currentComputerIndex == 0){
+            currentComputerIndex = 14;
+          }
+          currentComputerIndex--;
         }
-      }
-    });
+
+        setState(() {
+          if(scorePlayer >= 35 && scoreComputer < 35){
+            messageSuccess = "Victoire !!!!";
+            _WinnerSms(messageSuccess);
+          }if(scorePlayer < 35 && scoreComputer >= 35) {
+            messageSuccess = "Game Over";
+            _WinnerSms(messageSuccess);
+          }
+        });
+
+         setState(() {
+           for (int i = 6; i >= 0; i--){
+             if(_board[i] != 0){
+               cpt1 = cpt1 + _board[i];
+             }
+           }
+
+           for (int i = 7; i <= 13; i++){
+             if(_board[i] != 0){
+               cpt2 = cpt2 + _board[i];
+             }
+           }
+
+         if(70 - (scorePlayer + scoreComputer) < 10){
+            if((scorePlayer + cpt1) > 35){
+              messageSuccess = "Vous avez perdue";
+              _WinnerSms(messageSuccess);
+            }else if((scoreComputer + cpt2) > 35){
+              messageSuccess = "Vous avez gagne";
+              _WinnerSms(messageSuccess);
+            }
+          }
+        });
+        setState(() {
+          message = "A vous de jouer..";
+        });
+
+        setState(() {
+          _jeuEstEnCours = false;
+        });
+
+
+
   }
 }
+
+
