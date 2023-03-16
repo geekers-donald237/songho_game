@@ -148,6 +148,10 @@ class _OnePlayersState extends State<OnePlayers> {
                   },
                 );
                 Future.delayed(Duration(seconds: 1), () {
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                    DeviceOrientation.portraitDown,
+                  ]);
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => Start()),
                           (route) => false
@@ -407,13 +411,23 @@ class _OnePlayersState extends State<OnePlayers> {
                cpt2++;
              }
            }
+
+           if(cpt1 == 0 && cpt2!=0){
+             messageSuccess = "Game Over";
+             _WinnerSms(messageSuccess);
+           }else if(cpt1 != 0 && cpt2 == 0) {
+             messageSuccess = "Victoire !!!";
+             _WinnerSms(messageSuccess);
+           }
+
          });
 
         setState(() {
           if(cpt1 == 0 && cpt2 != 0){
             messageSuccess = "Victoire !!!!!!";
             _WinnerSms(messageSuccess);
-          }else if(cpt2 == 0 && cpt1 != 0){
+          }
+          if(cpt2 == 0 && cpt1 != 0){
             messageSuccess = "Youre are lose";
             _WinnerSms(messageSuccess);
           }
@@ -431,6 +445,7 @@ class _OnePlayersState extends State<OnePlayers> {
             }
           }
         });
+
         setState(() {
           message = "A vous de jouer..";
         });

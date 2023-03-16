@@ -3,10 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:songhogame/views/Start.dart';
 
 void main() {
-    SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+
   runApp(const MyApp());
 }
 

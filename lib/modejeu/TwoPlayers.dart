@@ -146,6 +146,10 @@ class _TwoPlayersState extends State<TwoPlayers> {
                   },
                 );
                 Future.delayed(Duration(seconds: 1), () {
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                    DeviceOrientation.portraitDown,
+                  ]);
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => Start()),
                           (route) => false);
@@ -446,7 +450,7 @@ class _TwoPlayersState extends State<TwoPlayers> {
 
       for (int i = 7; i <= 13; i++) {
         if (_board[i] != 0) {
-          cpt2 + _board[i];
+         cpt2 =  cpt2 + _board[i];
         }
       }
       if (70 - (score2 + score1) < 10) {
@@ -458,6 +462,16 @@ class _TwoPlayersState extends State<TwoPlayers> {
           _WinnerSms(messageSuccess);
         }
       }
+
+      if(cpt1 == 0 && cpt2!=0){
+        messageSuccess = "Victoire ! J2";
+        _WinnerSms(messageSuccess);
+      }
+      if(cpt1 != 0 && cpt2 == 0) {
+        messageSuccess = "Victoire ! J1";
+        _WinnerSms(messageSuccess);
+      }
+
     });
   }
 }

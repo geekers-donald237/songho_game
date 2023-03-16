@@ -27,8 +27,8 @@ class _RegleState extends State<Regle> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             SystemChrome.setPreferredOrientations([
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight,
+              DeviceOrientation.portraitDown,
+              DeviceOrientation.portraitUp,
             ]);
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) =>  Start()),
