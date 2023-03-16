@@ -16,7 +16,8 @@ class Start extends StatelessWidget {
           leading: Icon(Icons.home),
           title: Text("Bienvenue !"),
           actions: [
-            IconButton(
+            IconButton(     
+ 
               icon: Icon(Icons.info_outline) ,onPressed:() {
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
