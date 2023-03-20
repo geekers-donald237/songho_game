@@ -24,14 +24,6 @@
         Si le nombre de pierres pris par l’un des joueurs est supérieur à 35, il gagne.
         Si le nombre de pierres des deux joueurs, en excluant les prises, est inférieur à 10, le gagnant est celui qui a la somme de ses prises et du nombre des pierres de son côté, supérieur à 35.
 
-## Interdictions
-
-    Le jeu Songho comporte les interdictions suivantes :
-    On ne peut jouer les cases A6 et B6 si le nombre de pierres dont elle dispose est égal à 
-    1 ou 2. S’il est égal à 2, on peut jouer si et seulement si elle permet d’effectuer une prise, 
-    ou si c’est la seule case qui dispose de pierre.
-    Si, au terme d’une distribution, toutes les 7 cases (de A ou B) ont un nombre de pierres 
-    compris entre 2 et 4, aucune prise n’est faite.
 
 
 ## Jeu de Songho
@@ -66,10 +58,18 @@
 
     Il y a quelques règles supplémentaires à respecter pour jouer correctement au Songho, notamment en ce qui concerne les boucles et les prises. Si un joueur prend toutes les graines de son adversaire ou affame son adversaire, il est disqualifié. De plus, si le nombre de graines prises par l'un des joueurs est supérieur à 35, il gagne automatiquement, mais si les deux joueurs ont moins de 10 graines chacun (en excluant les prises), alors le joueur avec le plus grand nombre de graines remporte la partie.
 
-    L'application fournit une interface graphique conviviale pour jouer au jeu de Songho, avec des fonctionnalités telles que le choix du niveau de difficulté et l'option de jouer contre un ami ou contre l'ordinateur. Le joueur peut également accéder aux règles du jeu à tout moment en appuyant sur le bouton d'information.
+    L'application fournit une interface graphique conviviale pour jouer au jeu de Songho, avec des fonctionnalités telles que l'option de jouer contre un ami , contre l'ordinateur ou en ligne. Le joueur peut également accéder aux règles du jeu à tout moment en appuyant sur le bouton d'information.
 
     Pour télécharger l'APK de l'application, vous pouvez vous rendre dans le dossier build/app/outputs/flutter-apk/app-release.apk de votre projet Flutter.
 
+## Interdictions
+
+    Le jeu Songho comporte les interdictions suivantes :
+    On ne peut jouer les cases A6 et B6 si le nombre de pierres dont elle dispose est égal à 
+    1 ou 2. S’il est égal à 2, on peut jouer si et seulement si elle permet d’effectuer une prise, 
+    ou si c’est la seule case qui dispose de pierre.
+    Si, au terme d’une distribution, toutes les 7 cases (de A ou B) ont un nombre de pierres 
+    compris entre 2 et 4, aucune prise n’est faite.
 
 
 
