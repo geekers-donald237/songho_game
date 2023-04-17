@@ -1,4 +1,4 @@
-## Introduction
+[//]: # (Introduction## Introduction)
 
     Ce projet Flutter 3.7.4 est un jeu de stratégie appelé "Songho". Le but du jeu est de s'emparer d'un maximum de graines.
      Le joueur qui a le plus de graines à la fin de la partie l'emporte.
@@ -70,6 +70,4 @@
     ou si c’est la seule case qui dispose de pierre.
     Si, au terme d’une distribution, toutes les 7 cases (de A ou B) ont un nombre de pierres 
     compris entre 2 et 4, aucune prise n’est faite.
-
-
 
