@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songhogame/views/Start.dart';
 
 import '../views/widget/buildText.dart';
@@ -14,52 +13,33 @@ class Regle extends StatefulWidget {
 }
 
 class _RegleState extends State<Regle> {
-  final ScrollController _scrollController = ScrollController();
-  bool _isButtonVisible = false;
-  late SharedPreferences _prefs;
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   void initState() {
-    super.initState();
-    _loadPrefs();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  void _loadPrefs() async {
-  _prefs = await SharedPreferences.getInstance();
-  _prefs.setBool('isLooked', true);
-}
-
-  void _navigateToStart(BuildContext context) {
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => Start()),
-      (route) => false,
-    );
+      DeviceOrientation.portraitUp
+    ]); // Set the app to only allow portrait orientation
+    super.initState();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Principe du Jeu'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => _navigateToStart(context),
+          onPressed: () {
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitDown,
+              DeviceOrientation.portraitUp,
+            ]);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => Start()),
+                (route) => false);
+          },
         ),
       ),
       body: SingleChildScrollView(
-        controller: _scrollController,
-        child: const Center(
+        child: Center(
           child: Padding(
             padding: EdgeInsets.all(12.0),
             child: Column(
@@ -121,29 +101,6 @@ class _RegleState extends State<Regle> {
           ),
         ),
       ),
-      floatingActionButton: AnimatedOpacity(
-        opacity: _isButtonVisible ? 1.0 : 0.0,
-        duration: Duration(milliseconds: 300),
-        child: FloatingActionButton(
-          onPressed: () {
-            // Actions à effectuer lorsque le bouton est cliqué
-          },
-          child: Icon(Icons.arrow_forward_rounded),
-        ),
-      ),
     );
-  }
-
-  void _scrollListener() {
-    if (_scrollController.offset >=
-        _scrollController.position.maxScrollExtent) {
-      setState(() {
-        _isButtonVisible = true;
-      });
-    } else {
-      setState(() {
-        _isButtonVisible = false;
-      });
-    }
   }
 }
