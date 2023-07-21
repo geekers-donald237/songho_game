@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/modejeu/OnePlayers.dart';
 import 'package:songhogame/modejeu/TwoPlayers.dart';
 
@@ -11,12 +12,14 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
+  final gameController = GameController();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Choose Your Mode"),
@@ -30,18 +33,8 @@ class _StartState extends State<Start> {
                     title: Text("Player And Computer"),
                     subtitle: Text("lets Go on computer"),
                     onTap: () {
-                      //screen orientation
-                      WidgetsFlutterBinding.ensureInitialized();
-                      // Step 3
-                      SystemChrome.setPreferredOrientations([
-                        DeviceOrientation.landscapeLeft,
-                        DeviceOrientation.landscapeRight,
-                      ]);
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const OnePlayers(),
-                          ),
-                          (route) => false);
+                      gameController.changeScreenOrientation(
+                          context, const OnePlayers());
                     },
                   ),
                   ListTile(
@@ -55,17 +48,8 @@ class _StartState extends State<Start> {
                     subtitle: Text("Get's Started"),
                     onTap: () {
                       //screen orientation
-                      WidgetsFlutterBinding.ensureInitialized();
-                      // Step 3
-                      SystemChrome.setPreferredOrientations([
-                        DeviceOrientation.landscapeLeft,
-                        DeviceOrientation.landscapeRight,
-                      ]);
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const TwoPlayers(),
-                          ),
-                          (route) => false);
+                      gameController.changeScreenOrientation(
+                          context, const TwoPlayers());
                     },
                   ),
                 ],
@@ -93,23 +77,10 @@ class _StartState extends State<Start> {
                   DeviceOrientation.portraitUp,
                   DeviceOrientation.portraitDown,
                 ]);
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const Regle()),
-                    (route) => false);
+                gameController.changeScreenOrientation(context, const Regle());
               },
             ),
           ],
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              // No action needed here
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Get Started"),
-            ),
-          ),
         ),
       ),
     );

@@ -5,7 +5,7 @@ class GameInfoBar extends StatelessWidget {
   const GameInfoBar({
     super.key,
     required this.scorePlayer,
-   required this.message,
+    required this.message,
     required this.scoreComputer,
   });
 
@@ -23,11 +23,22 @@ class GameInfoBar extends StatelessWidget {
           Player(
             icon: Icons.person,
             score: scorePlayer,
+            playerName: 'J1',
           ),
-          Text(message),
+          Text(
+            message,
+            style: TextStyle(
+              fontSize:
+                  14, // Taille de police plus petite que l'original (à ajuster selon vos préférences)
+              fontWeight:
+                  FontWeight.bold, // Texte en gras pour attirer l'attention
+              color: Colors.black, // Couleur du texte
+            ),
+          ),
           Player(
             icon: Icons.laptop_chromebook,
             score: scoreComputer,
+            playerName: 'IA',
           )
         ],
       ),

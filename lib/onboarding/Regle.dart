@@ -126,7 +126,10 @@ class _RegleState extends State<Regle> {
         duration: Duration(milliseconds: 300),
         child: FloatingActionButton(
           onPressed: () {
-            // Actions à effectuer lorsque le bouton est cliqué
+            Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => Start() ),
+                  (route) => false,
+                );
           },
           child: Icon(Icons.arrow_forward_rounded),
         ),
