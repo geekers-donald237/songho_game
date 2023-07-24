@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:songhogame/controller/gameController.dart';
@@ -210,8 +209,6 @@ class _OnePlayersState extends State<OnePlayers> {
         currentComputerIndex = 14;
       }
       currentComputerIndex--;
-
-     
     }
 
      setState(() {

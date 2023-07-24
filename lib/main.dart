@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:songhogame/onboarding/Regle.dart';
 import 'package:songhogame/views/Start.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLooked = prefs.getBool('isLooked') ?? false;
 
@@ -23,13 +25,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Songho game',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-       home: isLooked ? Start() : Regle(),
+      //  home: isLooked ? Start() : Regle(),
+      home:  Start(),
     );
   }
 }
-
-

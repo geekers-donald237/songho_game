@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:songhogame/controller/gameController.dart';
-import 'package:songhogame/modejeu/OnePlayers.dart';
-import 'package:songhogame/modejeu/TwoPlayers.dart';
 
+import '../modejeu/OnePlayers.dart';
+import '../modejeu/TwoPlayers.dart';
 import '../onboarding/Regle.dart';
 
 class Start extends StatefulWidget {
@@ -13,9 +14,12 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   final gameController = GameController();
+
   @override
   void initState() {
     super.initState();
+    initialize();
+
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       showDialog(
         context: context,
@@ -84,5 +88,11 @@ class _StartState extends State<Start> {
         ),
       ),
     );
+  }
+
+  void initialize() async {
+    /// here we will add a wait second to move on next screen
+    await Future.delayed(Duration(seconds: 3));
+    FlutterNativeSplash.remove();
   }
 }
