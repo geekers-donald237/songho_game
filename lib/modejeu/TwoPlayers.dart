@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:songhogame/controller/gameController.dart';
-import 'package:songhogame/views/widget/drawer.dart';
-import 'package:songhogame/views/widget/player.dart';
+import 'package:songhogame/widget/drawer.dart';
+import 'package:songhogame/widget/player.dart';
 
 class TwoPlayers extends StatefulWidget {
   const TwoPlayers({Key? key}) : super(key: key);

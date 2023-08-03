@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songhogame/views/Start.dart';
-
-import '../views/widget/buildText.dart';
+import 'package:songhogame/widget/buildText.dart';
 
 class Regle extends StatefulWidget {
   const Regle({Key? key}) : super(key: key);

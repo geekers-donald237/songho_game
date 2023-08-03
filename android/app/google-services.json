@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "649644788637",
+    "project_id": "songhogame",
+    "storage_bucket": "songhogame.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649644788637:android:6770a8d0d517ca32403d74",
+        "android_client_info": {
+          "package_name": "com.example.songhogame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649644788637-f5d5ks3d35s2ljk5tceosqe5t6neb0pq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNdU1lMK5wsmFHQD9MocniKXsb_vOseVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649644788637-f5d5ks3d35s2ljk5tceosqe5t6neb0pq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "649644788637-j1oe306h9qmjdjoukf62i0dnjovsea8f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.songhogame"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

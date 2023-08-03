@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:songhogame/controller/auth_controller.dart';
+import 'package:songhogame/views/Start.dart';
 
 import '../../modejeu/OnePlayers.dart';
-import '../Start.dart';
 import 'customListtitle.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -79,7 +80,14 @@ class CustomDrawer extends StatelessWidget {
           ),
           const Divider(),
           CustomListTile(
-            leadingIcon: Icons.exit_to_app,
+            leadingIcon: Icons.logout_rounded,
+            title: "Deconnexion",
+            onTap: () {
+              AuthController().logout(context);
+            },
+          ),
+          CustomListTile(
+            leadingIcon: Icons.close_rounded,
             title: "Fermer",
             onTap: () {
               SystemNavigator.pop();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:songhogame/views/widget/player.dart';
+import 'package:songhogame/widget/player.dart';
 
 class GameInfoBar extends StatelessWidget {
   const GameInfoBar({

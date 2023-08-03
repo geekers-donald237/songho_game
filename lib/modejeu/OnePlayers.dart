@@ -1,10 +1,9 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:songhogame/controller/gameController.dart';
-import 'package:songhogame/views/widget/drawer.dart';
-
-import '../views/widget/gameInfo.dart';
+import 'package:songhogame/widget/drawer.dart';
+import 'package:songhogame/widget/gameInfo.dart';
 
 class OnePlayers extends StatefulWidget {
   const OnePlayers({Key? key}) : super(key: key);
