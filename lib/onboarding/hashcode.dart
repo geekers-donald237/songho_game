@@ -42,13 +42,13 @@ Future<void> saveHashCode(String uid, String hashCode) async {
   try {
     await firestore
         .collection('players')
-        .doc()
-        .collection('onlinepart')
-        .doc() // Utilisation de .doc() générera automatiquement un nouvel identifiant de document
+        .doc(
+            hashCode) // Utilisation de .doc() générera automatiquement un nouvel identifiant de document
         .set({
-      'hashCode': hashCode,
+      'hashCode': uid,
+      'userIdP1': hashCode,
     });
-    print('Code sauvegardé avec succès');
+    //print('Code sauvegardé avec succès');
   } catch (e) {
     print('Erreur lors de la sauvegarde du hashCode : $e');
   }
@@ -56,16 +56,50 @@ Future<void> saveHashCode(String uid, String hashCode) async {
 
 Future<User> getCurrentUser() async {
   User user = FirebaseAuth.instance.currentUser!;
-  String uid = user.uid;
 
   if (user != null) {
     await user
         .reload(); // Recharge les données de l'utilisateur depuis Firebase
     user = FirebaseAuth.instance.currentUser!;
 
-    print('UID: $uid');
+    //print('UID: $uid');
   } else {
     print('Aucun utilisateur connecté');
   }
   return user;
+}
+
+// Fonction pour rechercher le hashCode dans Firebase
+/* Future<bool> searchHashCodeInFirebase(String hashCode) async {
+  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+      .instance
+      .collection('players')
+      .where('hashCode', isEqualTo: hashCode)
+      .limit(1)
+      .get();
+
+  return snapshot.docs.isNotEmpty;
+} */
+
+Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
+  //User user = FirebaseAuth.instance.currentUser!;
+
+  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+      .instance
+      .collection('players')
+      .where('hashCode', isEqualTo: hashCode)
+      .limit(1)
+      .get();
+  
+  if (snapshot.docs.isNotEmpty) {
+    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot = snapshot.docs.first;
+    final String uid = documentSnapshot.id;
+    
+    await FirebaseFirestore
+        .instance
+        .collection('players')
+        .doc(uid)
+        .set({'userIdP2': uid}, SetOptions(merge: true)); // Ajoute l'uid au document existant
+  }
+  return user.uid;
 }

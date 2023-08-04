@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/views/signup_screen.dart';
@@ -31,7 +32,7 @@ class LogInScreen extends StatelessWidget {
                       fontWeight: FontWeight.w900,
                       fontSize: 50),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 10),
                 const Text(
                   'Log In',
                   style: TextStyle(
@@ -40,10 +41,24 @@ class LogInScreen extends StatelessWidget {
                       fontSize: 40),
                 ),
                 const SizedBox(height: 30),
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: SvgPicture.asset(
+                        'assets/images/game.svg', // Chemin vers votre fichier SVG
+                        width: 150, // Largeur souhaitée de l'image
+                        height: 150, // Hauteur souhaitée de l'image
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
                 TextInputFeild(
-                    controller: _emailController,
-                    labelText: 'Email',
-                    icon: Icons.email),
+                  controller: _emailController,
+                  labelText: 'Email',
+                  icon: Icons.email,
+                ),
                 const SizedBox(height: 15),
                 TextInputFeild(
                   controller: _passwordController,

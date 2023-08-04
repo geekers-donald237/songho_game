@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "649644788637-ndob0vp43hbfmprkn4oc6sict5eipt4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.songhogame",
+            "certificate_hash": "9b1937a52476f85f0a035f5e6cdc2a5038baa213"
+          }
+        },
+        {
           "client_id": "649644788637-f5d5ks3d35s2ljk5tceosqe5t6neb0pq.apps.googleusercontent.com",
           "client_type": 3
         }

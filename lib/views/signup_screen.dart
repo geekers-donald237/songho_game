@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/auth_controller.dart';
 import 'package:songhogame/controller/auth_google.dart';
+import 'package:songhogame/models/online_modal.dart';
 import 'package:songhogame/views/login_screen.dart';
 import 'package:songhogame/widget/text_input_field.dart';
 
@@ -35,35 +37,37 @@ class SignUpScreen extends StatelessWidget {
                       fontSize: 50),
                 ),
                 const Text(
-                  'Register',
+                  'Create your account',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w900,
-                      fontSize: 35),
+                      fontSize: 32),
                 ),
                 const SizedBox(height: 15),
                 Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: Image.asset(
-                        'assets/images/playstore.png',
-                        width: 150, // Ajustez la largeur souhaitée
-                        height: 150, // Ajustez la hauteur souhaitée
+                      child: SvgPicture.asset(
+                        'assets/images/game.svg', // Chemin vers votre fichier SVG
+                        width: 150, // Largeur souhaitée de l'image
+                        height: 150, // Hauteur souhaitée de l'image
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 18),
                 TextInputFeild(
-                    controller: _userNameController,
-                    labelText: 'Name',
-                    icon: Icons.person),
+                  controller: _userNameController,
+                  labelText: 'Name',
+                  icon: Icons.person,
+                ),
                 const SizedBox(height: 10),
                 TextInputFeild(
-                    controller: _emailController,
-                    labelText: 'Email',
-                    icon: Icons.email),
+                  controller: _emailController,
+                  labelText: 'Email',
+                  icon: Icons.email,
+                ),
                 const SizedBox(height: 10),
                 TextInputFeild(
                   controller: _passwordController,
@@ -110,7 +114,10 @@ class SignUpScreen extends StatelessWidget {
                       color: buttonColor,
                       borderRadius: BorderRadius.circular(10)),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      AuthService().signInWithGoogle();
+                      AuthService().saveGoogleUserInfoToFirestore(user);
+                    },
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

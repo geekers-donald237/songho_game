@@ -1,16 +1,58 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:songhogame/constants.dart';
-import 'package:songhogame/models/user_model.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
-import 'package:songhogame/widget/text_input_field.dart';
 
 var user = FirebaseAuth.instance.currentUser!;
+
+String inputValue = '';
+
+// Fonction pour récupérer la valeur saisie dans le TextField
+String getValueFromTextField(String value) {
+  inputValue = value;
+  //print(inputValue);
+
+  return inputValue;
+}
+
+/* void onPressedButton() async {
+  final inputHashCode = getValueFromTextField(inputValue);
+  final hashCodeExists = await saveUidIfHashCodeExists(inputHashCode, user.uid);
+
+  if (hashCodeExists) {
+    print('Le hashCode existe dans Firebase.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode existe
+  } else {
+    print('Le hashCode n\'existe pas dans Firebase.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode n'existe pas
+  }
+} */
+
+void onPressedButton() async {
+  final inputHashCode = getValueFromTextField(
+      inputValue); // Récupère la valeur saisie dans le TextField
+  final hashCodeExists = await saveUidIfHashCodeExists(
+      inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
+
+  if (hashCodeExists != null) {
+    // Enregistre l'uid si le hashCode existe
+    await saveUidIfHashCodeExists(inputHashCode, user.uid);
+    print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode existe et que l'UID a été enregistré
+  } else {
+    print('Le hashCode n\'existe pas dans Firebase.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode n'existe pas
+  }
+}
+
 void openModal(BuildContext context) {
-  TextEditingController inputController = TextEditingController();
+  TextEditingController codeController = TextEditingController();
+
+  bool isEditable = true;
 
   showModalBottomSheet(
     context: context,
+    //isScrollControlled: true,
     builder: (BuildContext context) {
       getCurrentUser();
       Size mediaQuery = MediaQuery.of(context).size;
@@ -35,12 +77,44 @@ void openModal(BuildContext context) {
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 16),
-                  TextInputFeild(
-                    controller: inputController,
-                    icon: Icons.password_outlined,
-                    labelText: 'Saisissez le code de la partie',
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          enabled: isEditable,
+                          controller: codeController,
+                          onChanged:
+                              getValueFromTextField, // Écoute les changements dans le TextField
+                          decoration: InputDecoration(
+                            labelText: 'Saisissez votre code ici',
+                            prefixIcon: Icon(Icons.password),
+                            labelStyle: const TextStyle(fontSize: 20),
+                            border: InputBorder
+                                .none, // Supprime la bordure inférieure
+                            focusedBorder: InputBorder
+                                .none, // Supprime la bordure inférieure pendant le focus
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Action à effectuer lors de la pression sur le bouton
+                          // Appeler la fonction de recherche
+                          onPressedButton();
+                        },
+                        child: Text('Join'),
+                      )
+                    ],
                   ),
                   SizedBox(height: 50),
+                  Divider(
+                    color: Colors.grey,
+                    thickness: 1.0,
+                    height: 20.0,
+                  ),
                   Text(
                     'Initier une partie',
                     style: TextStyle(
@@ -55,6 +129,7 @@ void openModal(BuildContext context) {
                     onPressed: () {
                       setState(() {
                         hashCode = generateHashCode();
+                        isEditable = false;
                       });
                       saveHashCode(hashCode, user.uid);
                     },
