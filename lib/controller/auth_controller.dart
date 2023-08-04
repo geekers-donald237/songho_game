@@ -1,17 +1,12 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/views/Start.dart';
 //import 'package:songhogame/views/Start.dart';
 import 'package:songhogame/views/login_screen.dart';
 import 'package:songhogame/models/user_model.dart' as model;
-import 'package:songhogame/views/signup_screen.dart';
 
 class AuthController extends GetxController {
 /*   late Rx<File?> _pickedImage; */
