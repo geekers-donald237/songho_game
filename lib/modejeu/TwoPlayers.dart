@@ -16,7 +16,7 @@ class _TwoPlayersState extends State<TwoPlayers> {
   void initState() {
     super.initState();
     // initialisation du plateau avec 5 billes par case
-    _board = List<int>.filled(14, 5);
+    _board = List<int>.filled(14, 4);
     // _board = [1, 3, 2, 6, 2, 2, 2, 2, 3, 2, 4, 4, 2, 3];
 
     _colorList = List<Color>.generate(14, (index) => Colors.grey[300]!);

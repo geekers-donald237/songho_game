@@ -1,9 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:songhogame/views/Start.dart';
-//import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/auth_controller.dart';
 import 'package:songhogame/views/Start.dart';
@@ -42,6 +40,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => Start(),
       },
+      builder: EasyLoading.init(),
       home: LogInScreen(),
     );
   }

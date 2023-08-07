@@ -1,9 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:songhogame/constants.dart';
+import 'package:songhogame/controller/gameController.dart';
+import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
+import 'package:songhogame/modejeu/Online.dart';
 
 var user = FirebaseAuth.instance.currentUser!;
+final gameController = GameController();
 
 String inputValue = '';
 
@@ -49,6 +53,8 @@ void openModal(BuildContext context) {
   TextEditingController codeController = TextEditingController();
 
   bool isEditable = true;
+  bool joinEnabled = true;
+  bool lancerEnabled = true;
 
   showModalBottomSheet(
     context: context,
@@ -104,6 +110,13 @@ void openModal(BuildContext context) {
                           // Action à effectuer lors de la pression sur le bouton
                           // Appeler la fonction de recherche
                           onPressedButton();
+                          joinEnabled
+                              ? () {
+                                  setState(() {
+                                    lancerEnabled = false;
+                                  });
+                                }
+                              : null;
                         },
                         child: Text('Join'),
                       )
@@ -127,11 +140,21 @@ void openModal(BuildContext context) {
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
+                      performFirebaseActions();
+                      lancerEnabled
+                          ? () {
+                              setState(() {
+                                joinEnabled = false;
+                              });
+                            }
+                          : null;
                       setState(() {
                         hashCode = generateHashCode();
                         isEditable = false;
                       });
                       saveHashCode(hashCode, user.uid);
+                      createAndSaveFirebaseTable(user.uid);
+                      retrieveFirebaseTable(user.uid);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: buttonColor,
@@ -173,6 +196,17 @@ void openModal(BuildContext context) {
                       ),
                     ],
                   ),
+                  SizedBox(height: 16),
+                  FloatingActionButton(
+                    onPressed: () {
+                      // Action à effectuer lorsque le bouton du modal est pressé
+                      // Ajoutez votre logique ici
+                      /* gameController.changeScreenOrientation(
+                          context, const Online());
+                      print('Le bouton du modal a été pressé !'); */
+                    },
+                    child: Icon(Icons.start_sharp),
+                  )
                 ],
               ),
             ),
