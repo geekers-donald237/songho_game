@@ -4,7 +4,6 @@ import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
-import 'package:songhogame/modejeu/Online.dart';
 
 var user = FirebaseAuth.instance.currentUser!;
 final gameController = GameController();
@@ -18,19 +17,6 @@ String getValueFromTextField(String value) {
 
   return inputValue;
 }
-
-/* void onPressedButton() async {
-  final inputHashCode = getValueFromTextField(inputValue);
-  final hashCodeExists = await saveUidIfHashCodeExists(inputHashCode, user.uid);
-
-  if (hashCodeExists) {
-    print('Le hashCode existe dans Firebase.');
-    // Effectuez ici les actions à réaliser lorsque le hashCode existe
-  } else {
-    print('Le hashCode n\'existe pas dans Firebase.');
-    // Effectuez ici les actions à réaliser lorsque le hashCode n'existe pas
-  }
-} */
 
 void onPressedButton() async {
   final inputHashCode = getValueFromTextField(

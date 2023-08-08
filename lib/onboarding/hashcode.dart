@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:songhogame/models/online_modal.dart';
 
 String generateHashCode() {
   Random random = Random();
@@ -69,8 +68,6 @@ Future<User> getCurrentUser() async {
 }
 
 Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
-  
-
   final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
       .instance
       .collection('players')
@@ -81,11 +78,12 @@ Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
   if (snapshot.docs.isNotEmpty) {
     final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         snapshot.docs.first;
-    final String uid = documentSnapshot.id;
+    final String documentId = documentSnapshot.id;
 
-    await FirebaseFirestore.instance.collection('players').doc(hashCode).set(
-        {'userIdP2': uid},
+    await FirebaseFirestore.instance.collection('players').doc(documentId).set(
+        {'userIdP2': uid, 'uid': hashCode},
         SetOptions(merge: true)); // Ajoute l'uid au document existant
   }
-  return user.uid;
+
+  return uid;
 }

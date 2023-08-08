@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:songhogame/controller/gameController.dart';
+import 'package:songhogame/controller/internet.dart';
 import 'package:songhogame/models/online_modal.dart';
 
 import '../modejeu/OnePlayers.dart';
@@ -47,7 +48,7 @@ class _StartState extends State<Start> {
                     title: Text("Online"),
                     subtitle: Text("Play with any friends"),
                     onTap: () {
-                      openModal(context);
+                      checkInternetAndOpenModal(context);
                     },
                   ),
                   ListTile(
