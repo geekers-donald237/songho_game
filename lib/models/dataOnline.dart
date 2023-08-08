@@ -170,6 +170,8 @@ class UserInformation {
   }
 } */
 
+String? globalUsername; // Variable globale pour stocker le nom d'utilisateur
+
 Future<String?> getUsernameFromFirestore(String uid) async {
   try {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -181,13 +183,25 @@ Future<String?> getUsernameFromFirestore(String uid) async {
       if (data != null) {
         String? username = data['username'];
         print('Nom d\'utilisateur récupéré depuis Firestore : $username');
-        return username;
+        globalUsername = username; // Sauvegarde le nom d'utilisateur dans la variable globale
+        return globalUsername;
       }
     }
     return null;
   } catch (error) {
-    print(
-        'Erreur lors de la récupération du nom d\'utilisateur depuis Firestore : $error');
+    print('Erreur lors de la récupération du nom d\'utilisateur depuis Firestore : $error');
     return null;
   }
+}
+
+
+// CARD FOR PLAYERS INFOS
+
+Card buildUserInfoCard(String? globalUsername) {
+  
+  return Card(
+    child: ListTile(
+      title: Text('Nom du player 2 : $globalUsername'),
+    ),
+  );
 }
