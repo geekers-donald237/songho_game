@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:songhogame/models/online_modal.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
 
 // Déclaration des variables globales
+String hashCode = '';
 List<int> data = List<int>.filled(14, 5);
 List<Color> colorList = List<Color>.generate(14, (index) => Colors.grey[300]!);
 
@@ -72,9 +72,8 @@ Future<void> retrieveFirebaseTable(String uid) async {
 
 void setState(Null Function() param0) {}
 
-var user = FirebaseAuth.instance.currentUser!;
-
 String inputValue = '';
+String usernameP2 = 'xc';
 
 // Fonction pour récupérer la valeur saisie dans le TextField
 String getValueFromTextField(String value) {
@@ -104,17 +103,20 @@ void performFirebaseActions() async {
   EasyLoading.show(status: 'Recherche en cours...');
 
   try {
-    saveUidIfHashCodeExists(inputValue, user.uid);
-    saveUsernameIfHashCodeExists(inputValue, user.uid);
+    //saveUidIfHashCodeExists(inputValue, user.uid);
+
+    saveUsernameIfHashCodeExists(hashCode, usernameP2);
+    //getUsernameFromFirestore(user.uid);
+    //saveUsernameIfHashCodeExists(inputValue, user.uid);
 
     // Simuler une pause pour représenter le temps d'exécution de la recherche
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 3));
 
     // Afficher un message de succès
-    EasyLoading.showSuccess('Recherche terminée avec succès');
+    EasyLoading.showSuccess('Reussie');
   } catch (e) {
     // Afficher un message d'erreur en cas d'échec
-    EasyLoading.showError('Erreur lors de la recherche');
+    EasyLoading.showError('Code absent');
   }
 
   // Masquer l'indicateur de chargement une fois la recherche terminée
@@ -139,7 +141,7 @@ void startGame() {
 }
 
 // Récupération du username pour pouvoir l'utiliser dans la partie de jeu
-class UserInformation {
+/* class UserInformation {
   String uid;
   String? username;
 
@@ -147,7 +149,7 @@ class UserInformation {
     this.uid,
     this.username,
   );
-}
+} */
 
 /* Future<UserInformation?> getUserInformationFromFirestore(String uid) async {
   try {
@@ -170,7 +172,7 @@ class UserInformation {
   }
 } */
 
-String? globalUsername; // Variable globale pour stocker le nom d'utilisateur
+/* String? globalUsername; // Variable globale pour stocker le nom d'utilisateur
 
 Future<String?> getUsernameFromFirestore(String uid) async {
   try {
@@ -181,27 +183,54 @@ Future<String?> getUsernameFromFirestore(String uid) async {
     if (snapshot.exists) {
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
       if (data != null) {
-        String? username = data['username'];
+        String? username = data['usernameP2'];
         print('Nom d\'utilisateur récupéré depuis Firestore : $username');
-        globalUsername = username; // Sauvegarde le nom d'utilisateur dans la variable globale
+        globalUsername =
+            username; // Sauvegarde le nom d'utilisateur dans la variable globale
         return globalUsername;
       }
     }
     return null;
   } catch (error) {
-    print('Erreur lors de la récupération du nom d\'utilisateur depuis Firestore : $error');
+    print(
+        'Erreur lors de la récupération du nom d\'utilisateur depuis Firestore : $error');
     return null;
   }
-}
-
+} */
 
 // CARD FOR PLAYERS INFOS
 
-Card buildUserInfoCard(String? globalUsername) {
-  
+/* Card buildUserInfoCard(String? globalUsername) {
   return Card(
     child: ListTile(
       title: Text('Nom du player 2 : $globalUsername'),
     ),
   );
+} */
+
+Future<String> getUsernameFromFirebase(String uid) async {
+  // Récupérer la référence de la collection "players" dans Firebase
+  CollectionReference playersCollection =
+      FirebaseFirestore.instance.collection('players');
+
+  // Récupérer le document correspondant à l'utilisateur donné
+  DocumentSnapshot document = await playersCollection.doc(user.uid).get();
+
+  // Vérifier si le document existe
+  if (document.exists) {
+    // Récupérer les données du document
+    Map<String, dynamic> userData = document.data() as Map<String, dynamic>;
+
+    // Récupérer le nom d'utilisateur
+    String username = userData['usernameP2'];
+
+    // Afficher le nom d'utilisateur dans la console
+    print('Nom d\'utilisateur : $username');
+
+    // Retourner le nom d'utilisateur
+    return username;
+  } else {
+    // Retourner une valeur par défaut si l'utilisateur n'existe pas
+    return 'Utilisateur introuvable';
+  }
 }

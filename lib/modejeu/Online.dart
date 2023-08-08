@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
+import 'package:songhogame/models/online_modal.dart';
 import 'package:songhogame/widget/drawer.dart';
 import 'package:songhogame/widget/player.dart';
 

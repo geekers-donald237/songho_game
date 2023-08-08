@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
@@ -28,14 +29,15 @@ void openModal(BuildContext context) {
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           return FractionallySizedBox(
-            heightFactor: desiredHeight / screenHeight,
+            //heightFactor: desiredHeight / screenHeight,
             child: Container(
               color: Color.fromARGB(255, 33, 51, 49),
               //height: mediaQuery.height * 20,
-              padding: EdgeInsets.all(30),
+              padding: EdgeInsets.all(16),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    SizedBox(height: 20),
                     Text(
                       'Initier une partie',
                       style: TextStyle(
@@ -68,7 +70,6 @@ void openModal(BuildContext context) {
                           isEditable = false;
                         });
                         saveHashCode(hashCode, user.uid);
-
                         createAndSaveFirebaseTable(user.uid);
                         retrieveFirebaseTable(user.uid);
                       },
@@ -112,7 +113,7 @@ void openModal(BuildContext context) {
                         ),
                       ],
                     ),
-                    SizedBox(height: 25),
+
                     Divider(
                       color: Colors.grey,
                       thickness: 1.0,
@@ -140,8 +141,22 @@ void openModal(BuildContext context) {
                               });
                             },
                             controller: codeController,
-                            onChanged:
-                                getValueFromTextField, // Écoute les changements dans le TextField
+                            maxLength:
+                                4, // Autorise la saisie de 5 caractères au maximum pour inclure le caractère supérieur
+                            onChanged: (value) {
+                              if (value.length > 4) {
+                                codeController.text = value.substring(0,
+                                    4); // Ignorer les caractères excédentaires
+                                codeController.selection =
+                                    TextSelection.fromPosition(
+                                  TextPosition(
+                                      offset:
+                                          4), // Position du curseur à la fin du texte
+                                );
+                              }
+                              getValueFromTextField; // Appeler la fonction pour obtenir la valeur du champ de texte
+                            },
+                            // Écoute les changements dans le TextField
                             decoration: InputDecoration(
                               labelText: 'Saisissez votre code ici',
                               prefixIcon: Icon(Icons.password),
@@ -161,7 +176,7 @@ void openModal(BuildContext context) {
                             performFirebaseActions();
                             // Action à effectuer lors de la pression sur le bouton
                             // Appeler la fonction de recherche
-                            onPressedButton();
+
                             joinEnabled
                                 ? () {
                                     setState(() {
@@ -170,14 +185,15 @@ void openModal(BuildContext context) {
                                   }
                                 : null;
                           },
-                          child: Text('Join'),
+                          child: Icon(Icons.share),
                         )
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 25),
                     FloatingActionButton(
                       onPressed: () {
-                        getUsernameFromFirestore(user.uid);
+                        
+                        //getUsernameFromFirebase(user.uid);
                         //getEmailUsernameFromFirestore();
                         // Action à effectuer lorsque le bouton du modal est pressé
                         // Ajoutez votre logique ici
@@ -189,7 +205,7 @@ void openModal(BuildContext context) {
                     ),
 
                     //Widget pour afficher les infos du 2ème players
-                    buildUserInfoCard(globalUsername),
+                    //buildUserInfoCard(globalUsername),
                   ],
                 ),
               ),

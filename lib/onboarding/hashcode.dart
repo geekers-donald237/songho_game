@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:songhogame/models/online_modal.dart';
 
 String generateHashCode() {
   Random random = Random();
@@ -58,7 +59,7 @@ Future<User> getCurrentUser() async {
   if (user != null) {
     await user
         .reload(); // Recharge les données de l'utilisateur depuis Firebase
-    user = FirebaseAuth.instance.currentUser!;
+    //user = FirebaseAuth.instance.currentUser!;
 
     //print('UID: $uid');
   } else {
@@ -88,7 +89,31 @@ Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
   return uid;
 }
 
-Future<String> saveUsernameIfHashCodeExists(String hashCode, String uid) async {
+Future<String> saveUsernameIfHashCodeExists(
+    String hashCode, String usernameP2) async {
+  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+      .instance
+      .collection('players')
+      .where('hashCode', isEqualTo: hashCode)
+      .limit(1)
+      .get();
+
+  if (snapshot.docs.isNotEmpty) {
+    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        snapshot.docs.first;
+    final String documentId = documentSnapshot.id;
+
+    await FirebaseFirestore.instance.collection('players').doc(documentId).set(
+        {'usernameP2': usernameP2},
+        SetOptions(merge: true)); // Ajoute le username au document existant
+
+    print('Nom d\'utilisateur enregistré : $usernameP2');
+  }
+
+  return usernameP2;
+}
+
+/* Future<String> saveUsernameIfHashCodeExists(String hashCode, String uid) async {
   final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
       .instance
       .collection('players')
@@ -103,10 +128,10 @@ Future<String> saveUsernameIfHashCodeExists(String hashCode, String uid) async {
 
     // Récupérer le document de l'utilisateur correspondant à l'UID
     final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
-        await FirebaseFirestore.instance.collection('players').doc(uid).get();
+        await FirebaseFirestore.instance.collection('players').doc(user.uid).get();
 
     if (userSnapshot.exists) {
-      final String username = userSnapshot.data()!['username'];
+      final String username = userSnapshot.data()!['usernameP2'];
 
       await FirebaseFirestore.instance
           .collection('players')
@@ -116,7 +141,8 @@ Future<String> saveUsernameIfHashCodeExists(String hashCode, String uid) async {
         SetOptions(merge: true),
       ); // Ajoute l'uid et le nom d'utilisateur au document existant
     }
-  }
+  } 
 
   return uid;
 }
+*/
