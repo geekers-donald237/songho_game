@@ -87,3 +87,36 @@ Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
 
   return uid;
 }
+
+Future<String> saveUsernameIfHashCodeExists(String hashCode, String uid) async {
+  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+      .instance
+      .collection('players')
+      .where('hashCode', isEqualTo: hashCode)
+      .limit(1)
+      .get();
+
+  if (snapshot.docs.isNotEmpty) {
+    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        snapshot.docs.first;
+    final String documentId = documentSnapshot.id;
+
+    // Récupérer le document de l'utilisateur correspondant à l'UID
+    final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        await FirebaseFirestore.instance.collection('players').doc(uid).get();
+
+    if (userSnapshot.exists) {
+      final String username = userSnapshot.data()!['username'];
+
+      await FirebaseFirestore.instance
+          .collection('players')
+          .doc(documentId)
+          .set(
+        {'usernameP2': username},
+        SetOptions(merge: true),
+      ); // Ajoute l'uid et le nom d'utilisateur au document existant
+    }
+  }
+
+  return uid;
+}

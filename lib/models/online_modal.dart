@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:songhogame/constants.dart';
-import 'package:songhogame/controller/auth_controller.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
@@ -127,6 +126,7 @@ void openModal(BuildContext context) {
                         isEditable = false;
                       });
                       saveHashCode(hashCode, user.uid);
+                      
                       createAndSaveFirebaseTable(user.uid);
                       retrieveFirebaseTable(user.uid);
                     },
@@ -173,8 +173,8 @@ void openModal(BuildContext context) {
                   SizedBox(height: 16),
                   FloatingActionButton(
                     onPressed: () {
-                        getEmailUsernameFromFirestore();
-                      storeUsernameOnFirestore();
+                      getUsernameFromFirestore(user.uid);
+                      //getEmailUsernameFromFirestore();
                       // Action à effectuer lorsque le bouton du modal est pressé
                       // Ajoutez votre logique ici
                       /* gameController.changeScreenOrientation(

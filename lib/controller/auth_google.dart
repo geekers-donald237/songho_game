@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   //final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -40,10 +39,14 @@ class AuthService {
     String uid = user.uid;
     String email = user.email ?? '';
 
+    // Extract username from email
+    String username = email.split("@")[0];
+
     try {
       await FirebaseFirestore.instance.collection('players').doc(uid).set({
         'uid': uid,
         'email': email,
+        'usernameP1': username,
       });
 
       print(

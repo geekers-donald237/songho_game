@@ -87,12 +87,10 @@ String getValueFromTextField(String value) {
 void onPressedButton() async {
   final inputHashCode = getValueFromTextField(
       inputValue); // Récupère la valeur saisie dans le TextField
-  final hashCodeExists = await saveUidIfHashCodeExists(
+  final result = await saveUidIfHashCodeExists(
       inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
 
-  if (hashCodeExists != null) {
-    // Enregistre l'uid si le hashCode existe
-    await saveUidIfHashCodeExists(inputHashCode, user.uid);
+  if (result != null) {
     print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
     // Effectuez ici les actions à réaliser lorsque le hashCode existe et que l'UID a été enregistré
   } else {
@@ -107,6 +105,7 @@ void performFirebaseActions() async {
 
   try {
     saveUidIfHashCodeExists(inputValue, user.uid);
+    saveUsernameIfHashCodeExists(inputValue, user.uid);
 
     // Simuler une pause pour représenter le temps d'exécution de la recherche
     await Future.delayed(Duration(seconds: 2));
@@ -122,6 +121,7 @@ void performFirebaseActions() async {
   EasyLoading.dismiss();
 }
 
+// Lancement de la partie à partir du hashCode et les deux uid
 void initializeGame(String player1Id, String player2Id, String gameId) {
   // Effectuez ici les actions nécessaires pour initialiser la partie de jeu
   // en utilisant les IDs des joueurs et l'ID de la partie
@@ -138,55 +138,56 @@ void startGame() {
   print('La partie de jeu est lancée !');
 }
 
-// Récupérer le debut de nom de votre adresse mail
-void getEmailUsernameFromFirestore() {
-  FirebaseFirestore.instance
-      .collection('players')
-      .doc(user.uid)
-      .get()
-      .then((DocumentSnapshot snapshot) {
-    String email = snapshot.get('email');
+// Récupération du username pour pouvoir l'utiliser dans la partie de jeu
+class UserInformation {
+  String uid;
+  String? username;
 
-    // Séparez l'adresse e-mail en deux parties, avant et après le "@"
-    List<String> emailParts = email.split('@');
-    String username = emailParts[0];
-
-    // Imprimez la partie souhaitée
-    print(username);
-  });
+  UserInformation(
+    this.uid,
+    this.username,
+  );
 }
 
-void storeUsernameOnFirestore() async {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  GoogleSignIn googleSignIn = GoogleSignIn();
-
-  // Vérifiez si l'utilisateur est connecté avec Google
-  bool isGoogleSignedIn = await googleSignIn.isSignedIn();
-
-  if (isGoogleSignedIn) {
-    // Récupérez les informations de l'utilisateur connecté avec Google
-    GoogleSignInAccount? currentUser = googleSignIn.currentUser;
-    String email = currentUser?.email ?? '';
-
-    // Séparez l'adresse e-mail en deux parties, avant et après le "@"
-    List<String> emailParts = email.split('@');
-    String username = emailParts[0];
-
-    // Imprimez la partie souhaitée
-    print(username);
-
-    // Stockez le nom d'utilisateur sur Firestore
-    try {
-      await firestore.collection('players').doc(auth.currentUser!.uid).set({
-        'username': username,
-      }, SetOptions(merge: true));
-      print('Nom d\'utilisateur stocké avec succès sur Firestore.');
-    } catch (e) {
-      print(
-          'Erreur lors de la sauvegarde du nom d\'utilisateur sur Firestore: $e');
+/* Future<UserInformation?> getUserInformationFromFirestore(String uid) async {
+  try {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('players').doc(uid).get();
+    if (snapshot.exists) {
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null) {
+        String? username = data['username'];
+        UserInformation userInformation = UserInformation(uid, username);
+        print('Données récupérées depuis Firestore : $userInformation');
+        return userInformation;
+      }
     }
-  } else {
-    print('Utilisateur non connecté avec Google.');
+    return null;
+  } catch (error) {
+    print(
+        'Erreur lors de la récupération des informations de l\'utilisateur depuis Firestore : $error');
+    return null;
+  }
+} */
+
+Future<String?> getUsernameFromFirestore(String uid) async {
+  try {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('players')
+        .doc(user.uid)
+        .get();
+    if (snapshot.exists) {
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null) {
+        String? username = data['username'];
+        print('Nom d\'utilisateur récupéré depuis Firestore : $username');
+        return username;
+      }
+    }
+    return null;
+  } catch (error) {
+    print(
+        'Erreur lors de la récupération du nom d\'utilisateur depuis Firestore : $error');
+    return null;
   }
 }
