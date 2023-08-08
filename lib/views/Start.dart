@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/controller/internet.dart';
-import 'package:songhogame/models/online_modal.dart';
+import 'package:songhogame/modejeu/OnePlayers.dart';
+import 'package:songhogame/modejeu/TwoPlayers.dart';
+import 'package:songhogame/onboarding/Regle.dart';
 
-import '../modejeu/OnePlayers.dart';
-import '../modejeu/TwoPlayers.dart';
-import '../onboarding/Regle.dart';
+
 
 class Start extends StatefulWidget {
   @override
@@ -16,6 +16,7 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   final gameController = GameController();
+  bool _showAlertDialog = false;
 
   @override
   void initState() {
@@ -49,6 +50,9 @@ class _StartState extends State<Start> {
                     subtitle: Text("Play with any friends"),
                     onTap: () {
                       checkInternetAndOpenModal(context);
+                      setState(() {
+              _showAlertDialog = true;
+            });
                     },
                   ),
                   ListTile(

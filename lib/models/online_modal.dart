@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:songhogame/constants.dart';
+import 'package:songhogame/controller/auth_controller.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
@@ -8,39 +9,13 @@ import 'package:songhogame/onboarding/hashcode.dart';
 var user = FirebaseAuth.instance.currentUser!;
 final gameController = GameController();
 
-String inputValue = '';
-
-// Fonction pour récupérer la valeur saisie dans le TextField
-String getValueFromTextField(String value) {
-  inputValue = value;
-  //print(inputValue);
-
-  return inputValue;
-}
-
-void onPressedButton() async {
-  final inputHashCode = getValueFromTextField(
-      inputValue); // Récupère la valeur saisie dans le TextField
-  final hashCodeExists = await saveUidIfHashCodeExists(
-      inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
-
-  if (hashCodeExists != null) {
-    // Enregistre l'uid si le hashCode existe
-    await saveUidIfHashCodeExists(inputHashCode, user.uid);
-    print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
-    // Effectuez ici les actions à réaliser lorsque le hashCode existe et que l'UID a été enregistré
-  } else {
-    print('Le hashCode n\'existe pas dans Firebase.');
-    // Effectuez ici les actions à réaliser lorsque le hashCode n'existe pas
-  }
-}
-
 void openModal(BuildContext context) {
   TextEditingController codeController = TextEditingController();
 
   bool isEditable = true;
   bool joinEnabled = true;
   bool lancerEnabled = true;
+  bool isButtonDisabled = false;
 
   showModalBottomSheet(
     context: context,
@@ -74,6 +49,11 @@ void openModal(BuildContext context) {
                       Expanded(
                         child: TextField(
                           enabled: isEditable,
+                          onTap: () {
+                            setState(() {
+                              isButtonDisabled = false;
+                            });
+                          },
                           controller: codeController,
                           onChanged:
                               getValueFromTextField, // Écoute les changements dans le TextField
@@ -93,6 +73,7 @@ void openModal(BuildContext context) {
                       ),
                       ElevatedButton(
                         onPressed: () {
+                          performFirebaseActions();
                           // Action à effectuer lors de la pression sur le bouton
                           // Appeler la fonction de recherche
                           onPressedButton();
@@ -126,7 +107,14 @@ void openModal(BuildContext context) {
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      performFirebaseActions();
+                      isButtonDisabled ? null : () {};
+                      ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: isButtonDisabled
+                            ? const Color.fromARGB(255, 255, 255, 255)
+                            : Colors.grey,
+                      );
+
                       lancerEnabled
                           ? () {
                               setState(() {
@@ -185,6 +173,8 @@ void openModal(BuildContext context) {
                   SizedBox(height: 16),
                   FloatingActionButton(
                     onPressed: () {
+                        getEmailUsernameFromFirestore();
+                      storeUsernameOnFirestore();
                       // Action à effectuer lorsque le bouton du modal est pressé
                       // Ajoutez votre logique ici
                       /* gameController.changeScreenOrientation(

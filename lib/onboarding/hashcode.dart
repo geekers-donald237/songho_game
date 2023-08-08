@@ -81,7 +81,7 @@ Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
     final String documentId = documentSnapshot.id;
 
     await FirebaseFirestore.instance.collection('players').doc(documentId).set(
-        {'userIdP2': uid, 'uid': hashCode},
+        {'userIdP2': uid},
         SetOptions(merge: true)); // Ajoute l'uid au document existant
   }
 

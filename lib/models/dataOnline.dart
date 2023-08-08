@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:songhogame/onboarding/hashcode.dart';
 
 // Déclaration des variables globales
 List<int> data = List<int>.filled(14, 5);
@@ -28,7 +31,6 @@ void createAndSaveFirebaseTable(String uid) async {
         "Une erreur s'est produite lors de la création et de l'enregistrement de la table sur Firebase : $error");
   }
 }
-
 
 late List<int> _board;
 late List<Color> _colorList;
@@ -70,35 +72,121 @@ Future<void> retrieveFirebaseTable(String uid) async {
 
 void setState(Null Function() param0) {}
 
+var user = FirebaseAuth.instance.currentUser!;
+
+String inputValue = '';
+
+// Fonction pour récupérer la valeur saisie dans le TextField
+String getValueFromTextField(String value) {
+  inputValue = value;
+  //print(inputValue);
+
+  return inputValue;
+}
+
+void onPressedButton() async {
+  final inputHashCode = getValueFromTextField(
+      inputValue); // Récupère la valeur saisie dans le TextField
+  final hashCodeExists = await saveUidIfHashCodeExists(
+      inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
+
+  if (hashCodeExists != null) {
+    // Enregistre l'uid si le hashCode existe
+    await saveUidIfHashCodeExists(inputHashCode, user.uid);
+    print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode existe et que l'UID a été enregistré
+  } else {
+    print('Le hashCode n\'existe pas dans Firebase.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode n'existe pas
+  }
+}
 
 void performFirebaseActions() async {
-    // Afficher l'indicateur de chargement
-    EasyLoading.show(status: 'Recherche en cours...');
+  // Afficher l'indicateur de chargement
+  EasyLoading.show(status: 'Recherche en cours...');
 
-    // Vos opérations de recherche sur Firebase ici
-    // ...
+  try {
+    saveUidIfHashCodeExists(inputValue, user.uid);
 
     // Simuler une pause pour représenter le temps d'exécution de la recherche
-    await Future.delayed(Duration(seconds: 30));
+    await Future.delayed(Duration(seconds: 2));
 
-    // Masquer l'indicateur de chargement une fois la recherche terminée
-    EasyLoading.dismiss();
+    // Afficher un message de succès
+    EasyLoading.showSuccess('Recherche terminée avec succès');
+  } catch (e) {
+    // Afficher un message d'erreur en cas d'échec
+    EasyLoading.showError('Erreur lors de la recherche');
   }
 
+  // Masquer l'indicateur de chargement une fois la recherche terminée
+  EasyLoading.dismiss();
+}
 
-  void initializeGame(String player1Id, String player2Id, String gameId) {
+void initializeGame(String player1Id, String player2Id, String gameId) {
   // Effectuez ici les actions nécessaires pour initialiser la partie de jeu
   // en utilisant les IDs des joueurs et l'ID de la partie
 
   // Exemple:
-  print('Initialisation de la partie $gameId avec les joueurs $player1Id et $player2Id');
+  print(
+      'Initialisation de la partie $gameId avec les joueurs $player1Id et $player2Id');
 
   // Lancez la partie
   startGame();
 }
 
 void startGame() {
-
-
   print('La partie de jeu est lancée !');
+}
+
+// Récupérer le debut de nom de votre adresse mail
+void getEmailUsernameFromFirestore() {
+  FirebaseFirestore.instance
+      .collection('players')
+      .doc(user.uid)
+      .get()
+      .then((DocumentSnapshot snapshot) {
+    String email = snapshot.get('email');
+
+    // Séparez l'adresse e-mail en deux parties, avant et après le "@"
+    List<String> emailParts = email.split('@');
+    String username = emailParts[0];
+
+    // Imprimez la partie souhaitée
+    print(username);
+  });
+}
+
+void storeUsernameOnFirestore() async {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  GoogleSignIn googleSignIn = GoogleSignIn();
+
+  // Vérifiez si l'utilisateur est connecté avec Google
+  bool isGoogleSignedIn = await googleSignIn.isSignedIn();
+
+  if (isGoogleSignedIn) {
+    // Récupérez les informations de l'utilisateur connecté avec Google
+    GoogleSignInAccount? currentUser = googleSignIn.currentUser;
+    String email = currentUser?.email ?? '';
+
+    // Séparez l'adresse e-mail en deux parties, avant et après le "@"
+    List<String> emailParts = email.split('@');
+    String username = emailParts[0];
+
+    // Imprimez la partie souhaitée
+    print(username);
+
+    // Stockez le nom d'utilisateur sur Firestore
+    try {
+      await firestore.collection('players').doc(auth.currentUser!.uid).set({
+        'username': username,
+      }, SetOptions(merge: true));
+      print('Nom d\'utilisateur stocké avec succès sur Firestore.');
+    } catch (e) {
+      print(
+          'Erreur lors de la sauvegarde du nom d\'utilisateur sur Firestore: $e');
+    }
+  } else {
+    print('Utilisateur non connecté avec Google.');
+  }
 }
