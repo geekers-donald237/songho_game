@@ -78,7 +78,7 @@ void openModal(BuildContext context) {
                         username = await getUsernameFromFirebase(
                                           user.uid);
                                       setState(() {
-                                        usernameP1 = username[1];
+                                        usernameP1 = username[0];
                                       });
                       },
                       style: ElevatedButton.styleFrom(
@@ -213,7 +213,7 @@ void openModal(BuildContext context) {
                                       username = await getUsernameFromFirebase(
                                           user.uid);
                                       setState(() {
-                                        usernameP2 = username[0];
+                                        usernameP2 = username[1];
                                       });
                                       //executeAfterDelay();
                                     }
