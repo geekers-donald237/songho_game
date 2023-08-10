@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:async';
+import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:songhogame/models/online_modal.dart';
+import 'package:flutter_share/flutter_share.dart';
 
+// Générer le hashCode de la partie
 String generateHashCode() {
   Random random = Random();
   BigInt inputInteger = BigInt.zero;
@@ -24,18 +25,27 @@ String generateHashCode() {
   return hashCode;
 }
 
-void copyCodeToClipboard(BuildContext context, String hashcode) {
-  Clipboard.setData(ClipboardData(text: hashcode)).then((value) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Code copié avec succès')),
-    );
-  }).catchError((error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Échec de la copie du Code')),
-    );
-  });
+void share() async {
+  await FlutterShare.share(
+      title: 'Example share',
+      text: 'Example share text',
+      linkUrl: 'https://flutter.dev/',
+      chooserTitle: 'Example Chooser Title');
 }
+/* void shareGeneratedHashCode() async {
+  String hashCode = generateHashCode();
 
+  try {
+    await FlutterShare.share(
+      title: 'Code de la Partie',
+      text: 'Code généré : $hashCode',
+    );
+  } catch (e) {
+    print(e.toString());
+  }
+} */
+
+// Enregistrer le hashCode sur Firebase
 Future<void> saveHashCode(String uid, String hashCode) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -53,6 +63,7 @@ Future<void> saveHashCode(String uid, String hashCode) async {
   }
 }
 
+// Récupérer l'uid de l'utilisateur
 Future<User> getCurrentUser() async {
   User user = FirebaseAuth.instance.currentUser!;
 
@@ -88,61 +99,3 @@ Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
 
   return uid;
 }
-
-Future<String> saveUsernameIfHashCodeExists(
-    String hashCode, String usernameP2) async {
-  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-      .instance
-      .collection('players')
-      .where('hashCode', isEqualTo: hashCode)
-      .limit(1)
-      .get();
-
-  if (snapshot.docs.isNotEmpty) {
-    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-        snapshot.docs.first;
-    final String documentId = documentSnapshot.id;
-
-    await FirebaseFirestore.instance.collection('players').doc(documentId).set(
-        {'usernameP2': usernameP2},
-        SetOptions(merge: true)); // Ajoute le username au document existant
-
-    print('Nom d\'utilisateur enregistré : $usernameP2');
-  }
-
-  return usernameP2;
-}
-
-/* Future<String> saveUsernameIfHashCodeExists(String hashCode, String uid) async {
-  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-      .instance
-      .collection('players')
-      .where('hashCode', isEqualTo: hashCode)
-      .limit(1)
-      .get();
-
-  if (snapshot.docs.isNotEmpty) {
-    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-        snapshot.docs.first;
-    final String documentId = documentSnapshot.id;
-
-    // Récupérer le document de l'utilisateur correspondant à l'UID
-    final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
-        await FirebaseFirestore.instance.collection('players').doc(user.uid).get();
-
-    if (userSnapshot.exists) {
-      final String username = userSnapshot.data()!['usernameP2'];
-
-      await FirebaseFirestore.instance
-          .collection('players')
-          .doc(documentId)
-          .set(
-        {'usernameP2': username},
-        SetOptions(merge: true),
-      ); // Ajoute l'uid et le nom d'utilisateur au document existant
-    }
-  } 
-
-  return uid;
-}
-*/

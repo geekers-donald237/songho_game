@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -73,7 +75,6 @@ Future<void> retrieveFirebaseTable(String uid) async {
 void setState(Null Function() param0) {}
 
 String inputValue = '';
-String usernameP2 = 'xc';
 
 // Fonction pour récupérer la valeur saisie dans le TextField
 String getValueFromTextField(String value) {
@@ -104,11 +105,9 @@ void performFirebaseActions() async {
 
   try {
     //saveUidIfHashCodeExists(inputValue, user.uid);
-
-    saveUsernameIfHashCodeExists(hashCode, usernameP2);
-    //getUsernameFromFirestore(user.uid);
+/*     getUsernameFromFirebase(user.uid);
+    saveUsernameIfHashCodeExists(hashCode, user.uid); */
     //saveUsernameIfHashCodeExists(inputValue, user.uid);
-
     // Simuler une pause pour représenter le temps d'exécution de la recherche
     await Future.delayed(Duration(seconds: 3));
 
@@ -121,23 +120,6 @@ void performFirebaseActions() async {
 
   // Masquer l'indicateur de chargement une fois la recherche terminée
   EasyLoading.dismiss();
-}
-
-// Lancement de la partie à partir du hashCode et les deux uid
-void initializeGame(String player1Id, String player2Id, String gameId) {
-  // Effectuez ici les actions nécessaires pour initialiser la partie de jeu
-  // en utilisant les IDs des joueurs et l'ID de la partie
-
-  // Exemple:
-  print(
-      'Initialisation de la partie $gameId avec les joueurs $player1Id et $player2Id');
-
-  // Lancez la partie
-  startGame();
-}
-
-void startGame() {
-  print('La partie de jeu est lancée !');
 }
 
 // Récupération du username pour pouvoir l'utiliser dans la partie de jeu
@@ -197,16 +179,24 @@ Future<String?> getUsernameFromFirestore(String uid) async {
     return null;
   }
 } */
+/* 
+Future<String> useName = getUsernameFromFirebase(user.uid);
+
+Future<String> getUsename(Future<String> useNAme) async {
+  String myString = await useName;
+
+  return myString;
+}
+*/
 
 // CARD FOR PLAYERS INFOS
-
-/* Card buildUserInfoCard(String? globalUsername) {
+Card buildUserInfoCard(String useName) {
   return Card(
     child: ListTile(
-      title: Text('Nom du player 2 : $globalUsername'),
+      title: Text('Nom du player 2 : $useName'),
     ),
   );
-} */
+}
 
 Future<String> getUsernameFromFirebase(String uid) async {
   // Récupérer la référence de la collection "players" dans Firebase
@@ -214,7 +204,7 @@ Future<String> getUsernameFromFirebase(String uid) async {
       FirebaseFirestore.instance.collection('players');
 
   // Récupérer le document correspondant à l'utilisateur donné
-  DocumentSnapshot document = await playersCollection.doc(user.uid).get();
+  DocumentSnapshot document = await playersCollection.doc(uid).get();
 
   // Vérifier si le document existe
   if (document.exists) {
@@ -222,13 +212,14 @@ Future<String> getUsernameFromFirebase(String uid) async {
     Map<String, dynamic> userData = document.data() as Map<String, dynamic>;
 
     // Récupérer le nom d'utilisateur
-    String username = userData['usernameP2'];
+    String usernameP2 = userData['usernameP1'];
 
     // Afficher le nom d'utilisateur dans la console
-    print('Nom d\'utilisateur : $username');
+    print('Nom d\'utilisateur : $usernameP2');
+    print(usernameP2.runtimeType);
 
     // Retourner le nom d'utilisateur
-    return username;
+    return '$usernameP2';
   } else {
     // Retourner une valeur par défaut si l'utilisateur n'existe pas
     return 'Utilisateur introuvable';

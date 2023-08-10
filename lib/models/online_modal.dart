@@ -8,6 +8,7 @@ import 'package:songhogame/onboarding/hashcode.dart';
 
 var user = FirebaseAuth.instance.currentUser!;
 final gameController = GameController();
+String usernameP2 = '';
 
 void openModal(BuildContext context) {
   TextEditingController codeController = TextEditingController();
@@ -105,15 +106,28 @@ void openModal(BuildContext context) {
                             ),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            copyCodeToClipboard(context, hashCode);
-                          },
-                          child: Text('Copier'),
-                        ),
+                        SizedBox(
+                          width: 45.0,
+                          height: 45.0,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              share();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.zero,
+                              backgroundColor: Colors.black,
+                              shape: CircleBorder(),
+                              side: BorderSide(color: Colors.white, width: 1.2),
+                            ),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Icon(Icons.share_rounded),
+                            ),
+                          ),
+                        )
                       ],
                     ),
-
                     Divider(
                       color: Colors.grey,
                       thickness: 1.0,
@@ -171,41 +185,57 @@ void openModal(BuildContext context) {
                         SizedBox(
                           width: 20,
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            performFirebaseActions();
-                            // Action à effectuer lors de la pression sur le bouton
-                            // Appeler la fonction de recherche
-
-                            joinEnabled
-                                ? () {
-                                    setState(() {
-                                      lancerEnabled = false;
-                                    });
-                                  }
-                                : null;
-                          },
-                          child: Icon(Icons.share),
+                        Container(
+                          width: 45.0,
+                          height: 45.0,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            border: Border.all(color: Colors.white, width: 1.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: IconButton(
+                              onPressed: joinEnabled
+                                  ? () async {
+                                      performFirebaseActions();
+                                      // Appeler la fonction de recherche
+                                      setState(() {
+                                        lancerEnabled = false;
+                                      });
+                                      usernameP2 =
+                                          await getUsernameFromFirebase(
+                                              user.uid);
+                                      setState(() {
+                                        usernameP2;
+                                      });
+                                    }
+                                  : null,
+                              icon: Icon(
+                                Icons.check_box,
+                                color: Colors.white,
+                              ),
+                              iconSize: 24.0,
+                            ),
+                          ),
                         )
                       ],
                     ),
                     SizedBox(height: 25),
                     FloatingActionButton(
-                      onPressed: () {
-                        
-                        //getUsernameFromFirebase(user.uid);
+                      onPressed: () async {
+                        //print(usernameP2);
+
                         //getEmailUsernameFromFirestore();
                         // Action à effectuer lorsque le bouton du modal est pressé
                         // Ajoutez votre logique ici
                         /* gameController.changeScreenOrientation(
                             context, const Online());
-                        print('Le bouton du modal a été pressé !'); */
+                         */
                       },
                       child: Icon(Icons.start_sharp),
                     ),
-
-                    //Widget pour afficher les infos du 2ème players
-                    //buildUserInfoCard(globalUsername),
+                    buildUserInfoCard(usernameP2),
                   ],
                 ),
               ),
