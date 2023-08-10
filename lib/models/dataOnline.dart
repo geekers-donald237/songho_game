@@ -109,7 +109,7 @@ void performFirebaseActions() async {
     saveUsernameIfHashCodeExists(hashCode, user.uid); */
     //saveUsernameIfHashCodeExists(inputValue, user.uid);
     // Simuler une pause pour représenter le temps d'exécution de la recherche
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 4));
 
     // Afficher un message de succès
     EasyLoading.showSuccess('Reussie');
