@@ -33,8 +33,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Songho game',
-      theme:
-          ThemeData.dark().copyWith(scaffoldBackgroundColor: backgroundColor),
+      theme: ThemeData(
+        primarySwatch: Colors.grey,
+      ),
       debugShowCheckedModeBanner: false,
       //  home: isLooked ? Start() : Regle(),
       routes: {

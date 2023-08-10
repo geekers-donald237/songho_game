@@ -36,79 +36,81 @@ class _TwoPlayersState extends State<TwoPlayers> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Jeu de Songho')),
-      ),
-      drawer: CustomDrawer(),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Player(
-                      score: score1,
-                      icon: Icons.people,
-                      playerName: 'J1',
-                    ),
-                    Text(
-                      message,
-                      style: TextStyle(
-                        fontSize:
-                            14, // Taille de police plus petite que l'original (à ajuster selon vos préférences)
-                        fontWeight: FontWeight
-                            .bold, // Texte en gras pour attirer l'attention
-                        color: Colors.black, // Couleur du texte
-                      ),
-                    ),
-                    Player(
-                      score: score2,
-                      icon: Icons.people,
-                      playerName: 'J2',
-                    )
-                  ],
+    return Container(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Center(child: Text('Jeu de Songho')),
+        ),
+        drawer: CustomDrawer(),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 5,
                 ),
-              ),
-              Container(
-                child: GridView.count(
-                    padding: EdgeInsets.all(30),
-                    primary: false,
-                    shrinkWrap: true,
-                    crossAxisCount: 7,
-                    children: <Widget>[
-                      for (int i = 6; i >= 0; i--)
-                        Row(
-                          children: [
-                            buildCell(i, Colors.grey[300]!),
-                            SizedBox(
-                              height: 10,
-                              width: 10,
-                            ),
-                          ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Player(
+                        score: score1,
+                        icon: Icons.people,
+                        playerName: 'J1',
+                      ),
+                      Text(
+                        message,
+                        style: TextStyle(
+                          fontSize:
+                              14, // Taille de police plus petite que l'original (à ajuster selon vos préférences)
+                          fontWeight: FontWeight
+                              .bold, // Texte en gras pour attirer l'attention
+                          color: Colors.black, // Couleur du texte
                         ),
-                      for (int i = 7; i <= 13; i++)
-                        Row(
-                          children: [
-                            buildCell(i, Colors.grey[300]!),
-                            SizedBox(
-                              height: 10,
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                    ]),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-            ],
+                      ),
+                      Player(
+                        score: score2,
+                        icon: Icons.people,
+                        playerName: 'J2',
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  child: GridView.count(
+                      padding: EdgeInsets.all(30),
+                      primary: false,
+                      shrinkWrap: true,
+                      crossAxisCount: 7,
+                      children: <Widget>[
+                        for (int i = 6; i >= 0; i--)
+                          Row(
+                            children: [
+                              buildCell(i, Colors.grey[300]!),
+                              SizedBox(
+                                height: 10,
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                        for (int i = 7; i <= 13; i++)
+                          Row(
+                            children: [
+                              buildCell(i, Colors.grey[300]!),
+                              SizedBox(
+                                height: 10,
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                      ]),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ),

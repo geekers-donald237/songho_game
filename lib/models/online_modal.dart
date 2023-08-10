@@ -8,6 +8,8 @@ import 'package:songhogame/onboarding/hashcode.dart';
 
 var user = FirebaseAuth.instance.currentUser!;
 final gameController = GameController();
+List<String> username = [];
+String usernameP1 = '';
 String usernameP2 = '';
 
 void openModal(BuildContext context) {
@@ -50,7 +52,7 @@ void openModal(BuildContext context) {
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         isButtonDisabled ? null : () {};
                         ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -73,6 +75,11 @@ void openModal(BuildContext context) {
                         saveHashCode(hashCode, user.uid);
                         createAndSaveFirebaseTable(user.uid);
                         retrieveFirebaseTable(user.uid);
+                        username = await getUsernameFromFirebase(
+                                          user.uid);
+                                      setState(() {
+                                        usernameP1 = username[1];
+                                      });
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: buttonColor,
@@ -111,7 +118,7 @@ void openModal(BuildContext context) {
                           height: 45.0,
                           child: ElevatedButton(
                             onPressed: () {
-                              share();
+                              //share();
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
@@ -203,12 +210,12 @@ void openModal(BuildContext context) {
                                       setState(() {
                                         lancerEnabled = false;
                                       });
-                                      usernameP2 =
-                                          await getUsernameFromFirebase(
-                                              user.uid);
+                                      username = await getUsernameFromFirebase(
+                                          user.uid);
                                       setState(() {
-                                        usernameP2;
+                                        usernameP2 = username[0];
                                       });
+                                      //executeAfterDelay();
                                     }
                                   : null,
                               icon: Icon(
@@ -229,9 +236,6 @@ void openModal(BuildContext context) {
                         //getEmailUsernameFromFirestore();
                         // Action à effectuer lorsque le bouton du modal est pressé
                         // Ajoutez votre logique ici
-                        /* gameController.changeScreenOrientation(
-                            context, const Online());
-                         */
                       },
                       child: Icon(Icons.start_sharp),
                     ),
@@ -246,3 +250,14 @@ void openModal(BuildContext context) {
     },
   );
 }
+
+/* void executeAfterDelay() {
+  // Définir la durée de délai à 5 secondes (5000 millisecondes)
+  const delayDuration = Duration(seconds: 5);
+
+  // Utiliser Future.delayed pour exécuter la fonction après le délai spécifié
+  Future.delayed(delayDuration, () {
+    gameController.changeScreenOrientation(
+        context as BuildContext, const Online());
+  });
+} */

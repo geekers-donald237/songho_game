@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -122,73 +121,6 @@ void performFirebaseActions() async {
   EasyLoading.dismiss();
 }
 
-// Récupération du username pour pouvoir l'utiliser dans la partie de jeu
-/* class UserInformation {
-  String uid;
-  String? username;
-
-  UserInformation(
-    this.uid,
-    this.username,
-  );
-} */
-
-/* Future<UserInformation?> getUserInformationFromFirestore(String uid) async {
-  try {
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('players').doc(uid).get();
-    if (snapshot.exists) {
-      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-      if (data != null) {
-        String? username = data['username'];
-        UserInformation userInformation = UserInformation(uid, username);
-        print('Données récupérées depuis Firestore : $userInformation');
-        return userInformation;
-      }
-    }
-    return null;
-  } catch (error) {
-    print(
-        'Erreur lors de la récupération des informations de l\'utilisateur depuis Firestore : $error');
-    return null;
-  }
-} */
-
-/* String? globalUsername; // Variable globale pour stocker le nom d'utilisateur
-
-Future<String?> getUsernameFromFirestore(String uid) async {
-  try {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('players')
-        .doc(user.uid)
-        .get();
-    if (snapshot.exists) {
-      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-      if (data != null) {
-        String? username = data['usernameP2'];
-        print('Nom d\'utilisateur récupéré depuis Firestore : $username');
-        globalUsername =
-            username; // Sauvegarde le nom d'utilisateur dans la variable globale
-        return globalUsername;
-      }
-    }
-    return null;
-  } catch (error) {
-    print(
-        'Erreur lors de la récupération du nom d\'utilisateur depuis Firestore : $error');
-    return null;
-  }
-} */
-/* 
-Future<String> useName = getUsernameFromFirebase(user.uid);
-
-Future<String> getUsename(Future<String> useNAme) async {
-  String myString = await useName;
-
-  return myString;
-}
-*/
-
 // CARD FOR PLAYERS INFOS
 Card buildUserInfoCard(String useName) {
   return Card(
@@ -198,7 +130,7 @@ Card buildUserInfoCard(String useName) {
   );
 }
 
-Future<String> getUsernameFromFirebase(String uid) async {
+/* Future<String> getUsernameFromFirebase(String uid) async {
   // Récupérer la référence de la collection "players" dans Firebase
   CollectionReference playersCollection =
       FirebaseFirestore.instance.collection('players');
@@ -213,10 +145,11 @@ Future<String> getUsernameFromFirebase(String uid) async {
 
     // Récupérer le nom d'utilisateur
     String usernameP2 = userData['usernameP1'];
+    String usernameP1 = userData['usernameP1'];
 
     // Afficher le nom d'utilisateur dans la console
-    print('Nom d\'utilisateur : $usernameP2');
-    print(usernameP2.runtimeType);
+/*     print('Nom d\'utilisateur : $usernameP2');
+    print(usernameP2.runtimeType); */
 
     // Retourner le nom d'utilisateur
     return '$usernameP2';
@@ -224,4 +157,77 @@ Future<String> getUsernameFromFirebase(String uid) async {
     // Retourner une valeur par défaut si l'utilisateur n'existe pas
     return 'Utilisateur introuvable';
   }
+} */
+
+Future<List<String>> getUsernameFromFirebase(String uid) async {
+  // Récupérer la référence de la collection "players" dans Firebase
+  CollectionReference playersCollection =
+      FirebaseFirestore.instance.collection('players');
+
+  // Récupérer le document correspondant à l'utilisateur donné
+  DocumentSnapshot document = await playersCollection.doc(uid).get();
+
+  // Initialiser une liste pour stocker les noms d'utilisateur
+  List<String> usernames = [];
+
+  // Vérifier si le document existe
+  if (document.exists) {
+    // Récupérer les données du document
+    Map<String, dynamic> userData = document.data() as Map<String, dynamic>;
+
+    // Récupérer le nom d'utilisateur P2 et l'ajouter à la liste
+    if (userData.containsKey('usernameP1')) {
+      String usernameP1 = userData['usernameP1'];
+      usernames.add(usernameP1);
+    }
+
+    // Récupérer le nom d'utilisateur P1 et l'ajouter à la liste
+    if (userData.containsKey('usernameP1')) {
+      String usernameP2 = userData['usernameP1'];
+      usernames.add(usernameP2);
+    }
+
+    // Retourner la liste de noms d'utilisateur
+    return usernames;
+  } else {
+    // Retourner une liste vide si l'utilisateur n'existe pas
+    return usernames;
+  }
 }
+
+/* Future<String> player1() async {
+  // Appeler la fonction getUsernameFromFirebase pour obtenir les noms d'utilisateur
+  List<String> usernames = await getUsernameFromFirebase(user.uid);
+
+  // Vérifier si la liste usernames n'est pas vide
+  if (usernames.isNotEmpty) {
+    String players1 = usernames[0]; // Accéder à la valeur du premier indice
+
+    print('Nom d\'utilisateur du premier indice : $players1');
+    print(players1.runtimeType);
+
+    return players1;
+  }
+
+  // Retourner une valeur par défaut si la liste est vide
+  return "Aucun nom d'utilisateur trouvé";
+}
+
+Future<String> player2() async {
+  // Appeler la fonction getUsernameFromFirebase pour obtenir les noms d'utilisateur
+  List<String> usernames = await getUsernameFromFirebase(user.uid);
+
+  // Vérifier si la liste usernames n'est pas vide
+  if (usernames.isNotEmpty) {
+    String players2 = usernames[1]; // Accéder à la valeur du premier indice
+
+    print('Nom d\'utilisateur du premier indice : $players2');
+
+    return players2;
+  }
+
+  // Retourner une valeur par défaut si la liste est vide
+  return "Aucun nom d'utilisateur trouvé";
+} */
+
+

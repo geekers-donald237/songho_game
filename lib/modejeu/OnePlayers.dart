@@ -37,55 +37,57 @@ class _OnePlayersState extends State<OnePlayers> {
   final gameController = GameController();
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Jeu de Songho')),
-      ),
-      drawer: CustomDrawer(),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              GameInfoBar(
-                  scorePlayer: scorePlayer,
-                  message: message,
-                  scoreComputer: scoreComputer),
-              Container(
-                child: GridView.count(
-                    padding: EdgeInsets.all(30),
-                    primary: false,
-                    shrinkWrap: true,
-                    crossAxisCount: 7,
-                    children: <Widget>[
-                      for (int i = 6; i >= 0; i--)
-                        Row(
-                          children: [
-                            buildCell(i, Colors.grey[300]!),
-                            SizedBox(
-                              height: 10,
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                      for (int i = 7; i <= 13; i++)
-                        Row(
-                          children: [
-                            buildCell(i, Colors.grey[300]!),
-                            SizedBox(
-                              height: 10,
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                    ]),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-            ],
+    return Container(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Center(child: Text('Jeu de Songho')),
+        ),
+        drawer: CustomDrawer(),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 5,
+                ),
+                GameInfoBar(
+                    scorePlayer: scorePlayer,
+                    message: message,
+                    scoreComputer: scoreComputer),
+                Container(
+                  child: GridView.count(
+                      padding: EdgeInsets.all(30),
+                      primary: false,
+                      shrinkWrap: true,
+                      crossAxisCount: 7,
+                      children: <Widget>[
+                        for (int i = 6; i >= 0; i--)
+                          Row(
+                            children: [
+                              buildCell(i, Colors.grey[300]!),
+                              SizedBox(
+                                height: 10,
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                        for (int i = 7; i <= 13; i++)
+                          Row(
+                            children: [
+                              buildCell(i, Colors.grey[300]!),
+                              SizedBox(
+                                height: 10,
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                      ]),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ),

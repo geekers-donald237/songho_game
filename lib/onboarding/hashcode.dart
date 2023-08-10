@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:async';
-import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_share/flutter_share.dart';
 
 // Générer le hashCode de la partie
 String generateHashCode() {
@@ -25,13 +23,11 @@ String generateHashCode() {
   return hashCode;
 }
 
-void share() async {
-  await FlutterShare.share(
-      title: 'Example share',
-      text: 'Example share text',
-      linkUrl: 'https://flutter.dev/',
-      chooserTitle: 'Example Chooser Title');
-}
+
+
+/* void share() async {
+Share.share('check out my website https://example.com');
+} */
 /* void shareGeneratedHashCode() async {
   String hashCode = generateHashCode();
 

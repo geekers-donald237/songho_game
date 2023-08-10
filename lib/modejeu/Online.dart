@@ -12,6 +12,9 @@ class Online extends StatefulWidget {
   _OnlineState createState() => _OnlineState();
 }
 
+String J2 = usernameP2;
+String J1 = usernameP1;
+
 class _OnlineState extends State<Online> {
   late List<int> _board;
   late List<Color> _colorList;
@@ -27,8 +30,8 @@ class _OnlineState extends State<Online> {
 
   int score1 = 0;
   int score2 = 0;
-  String message = "Joueur 1 a vous de commencer";
-  String statuts = "J1";
+  String message = "$J1 à vous de commencer";
+  String statuts = J1;
   int statut_joueur = 1;
   int gagnant = -1;
   String winner = "";
@@ -59,7 +62,7 @@ class _OnlineState extends State<Online> {
                     Player(
                       score: score1,
                       icon: Icons.people,
-                      playerName: 'J1',
+                      playerName: J1,
                     ),
                     Text(
                       message,
@@ -74,7 +77,7 @@ class _OnlineState extends State<Online> {
                     Player(
                       score: score2,
                       icon: Icons.people,
-                      playerName: 'J2',
+                      playerName: J2,
                     )
                   ],
                 ),
@@ -131,7 +134,7 @@ class _OnlineState extends State<Online> {
     } else {
       setState(() {
         if (_jeuEstEnCours == false) {
-          if (statuts == "J1") {
+          if (statuts == J1) {
             if (index >= 0 && index <= 6) {
               statut_joueur = 0;
               gameController.showSnackBar(
@@ -140,8 +143,8 @@ class _OnlineState extends State<Online> {
               if (_board[index] != 0) {
                 _distributePawns(index);
                 setState(() {
-                  message = "Patientez J2.....";
-                  statuts = "J2";
+                  message = "Patientez $J2.....";
+                  statuts = J2;
                 });
               } else {
                 gameController.showSnackBar(
@@ -157,8 +160,8 @@ class _OnlineState extends State<Online> {
               if (_board[index] != 0) {
                 _distributePawns(index);
                 setState(() {
-                  message = "Patienter J1...";
-                  statuts = "J1";
+                  message = "Patienter $J1...";
+                  statuts = J1;
                 });
               } else {
                 gameController.showSnackBar(
@@ -236,10 +239,10 @@ class _OnlineState extends State<Online> {
       });
 
       setState(() {
-        if (statuts == "J1") {
-          message = "A vous de Jouer joueur 1";
+        if (statuts == J1) {
+          message = "A vous de Jouer $J1";
         } else {
-          message = "A vous de Jouer joueur 2";
+          message = "A vous de Jouer $J2";
         }
       });
 
@@ -249,7 +252,7 @@ class _OnlineState extends State<Online> {
     while (
         _board[currentIndex] >= 2 && _board[currentIndex] <= 4 && !isMyHome) {
       setState(() {
-        if (statuts == "J2" && currentIndex >= 0 && currentIndex <= 6) {
+        if (statuts == J2 && currentIndex >= 0 && currentIndex <= 6) {
           // Vérifier que la case actuelle appartient au joueur 1
           // et qu'elle remplit les conditions de prise
           if (_board[currentIndex] >= 2 && _board[currentIndex] <= 4) {
@@ -257,7 +260,7 @@ class _OnlineState extends State<Online> {
             gameController.playSound('prise.mp3');
             _board[currentIndex] = 0;
           }
-        } else if (statuts == "J1" && currentIndex >= 7 && currentIndex <= 13) {
+        } else if (statuts == J1 && currentIndex >= 7 && currentIndex <= 13) {
           // Vérifier que la case actuelle appartient au joueur 2
           // et qu'elle remplit les conditions de prise
           if (_board[currentIndex] >= 2 && _board[currentIndex] <= 4) {
@@ -281,21 +284,21 @@ class _OnlineState extends State<Online> {
     });
 
     setState(() {
-      if (statuts == "J1") {
-        message = "A vous de Jouer joueur 1";
+      if (statuts == J1) {
+        message = "A vous de Jouer $J1";
       } else {
-        message = "A vous de Jouer joueur 2";
+        message = "A vous de Jouer $J2";
       }
     });
 
     //verif pour le score deja
     setState(() {
       if (score1 > 35 && score2 <= 35) {
-        messageSuccess = "Victoire J1";
+        messageSuccess = "Victoire $J1";
         gameController.WinnerSms(messageSuccess, context);
       }
       if (score1 <= 35 && score2 > 35) {
-        messageSuccess = "Victoire J2";
+        messageSuccess = "Victoire $J2";
         gameController.WinnerSms(messageSuccess, context);
       }
     });
@@ -315,20 +318,20 @@ class _OnlineState extends State<Online> {
       }
       if (score1 < 35 && score2 < 35 && (cpt1 + cpt2) < 10) {
         if ((score1 + cpt1) > 35) {
-          messageSuccess = "Victoire J1";
+          messageSuccess = "Victoire $J1";
           gameController.WinnerSms(messageSuccess, context);
         } else if ((score2 + cpt2) > 35) {
-          messageSuccess = "Victoire J2";
+          messageSuccess = "Victoire $J2";
           gameController.WinnerSms(messageSuccess, context);
         }
       }
 
       if (cpt1 == 0 && cpt2 != 0) {
-        messageSuccess = "Victoire J2";
+        messageSuccess = "Victoire $J2";
         gameController.WinnerSms(messageSuccess, context);
       }
       if (cpt1 != 0 && cpt2 == 0) {
-        messageSuccess = "Victoire J1";
+        messageSuccess = "Victoire $J1";
         gameController.WinnerSms(messageSuccess, context);
       }
     });
