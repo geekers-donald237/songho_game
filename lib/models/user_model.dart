@@ -13,7 +13,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
-        "username": name,
+        "usernameP1": name,
         "email": email,
       };
 
@@ -21,11 +21,8 @@ class User {
     var snapshotData = snapshot.data() as Map<String, dynamic>;
     return User(
       uid: snapshotData['uid'],
-      name: snapshotData['username'],
+      name: snapshotData['usernameP1'],
       email: snapshotData['email'],
     );
   }
 }
-
-
-
