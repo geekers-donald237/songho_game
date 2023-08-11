@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,7 +57,7 @@ class _RegleState extends State<Regle> {
       ),
       body: SingleChildScrollView(
         controller: _scrollController,
-        child: const Center(
+        child: Center(
           child: Padding(
             padding: EdgeInsets.all(12.0),
             child: Column(

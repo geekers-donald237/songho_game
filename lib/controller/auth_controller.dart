@@ -23,7 +23,7 @@ class AuthController extends GetxController {
 
   _selectInitialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => LogInScreen());
+      Get.offAll(() => Start());
     } else {
       Get.offAll(() => Start());
     }

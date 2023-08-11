@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
@@ -24,8 +23,8 @@ void openModal(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       getCurrentUser();
-      final double screenHeight = MediaQuery.of(context).size.height;
-      final double desiredHeight = screenHeight * 2;
+      //final double screenHeight = MediaQuery.of(context).size.height;
+      
       Size mediaQuery = MediaQuery.of(context).size;
       String hashCode = '';
 
@@ -34,7 +33,7 @@ void openModal(BuildContext context) {
           return FractionallySizedBox(
             //heightFactor: desiredHeight / screenHeight,
             child: Container(
-              color: Color.fromARGB(255, 33, 51, 49),
+              color: Color.fromARGB(255, 48, 51, 33),
               //height: mediaQuery.height * 20,
               padding: EdgeInsets.all(16),
               child: SingleChildScrollView(
