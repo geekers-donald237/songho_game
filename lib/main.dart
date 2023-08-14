@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Start(),
       },
       builder: EasyLoading.init(),
-      home: LogInScreen(),
+      home: Start(),
     );
   }
 }

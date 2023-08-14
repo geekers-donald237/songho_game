@@ -18,8 +18,9 @@ class LogInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Container(
-          color: Colors.black,
+          
           margin: const EdgeInsets.symmetric(horizontal: 5),
           alignment: Alignment.center,
           child: SingleChildScrollView(
