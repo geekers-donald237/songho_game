@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:songhogame/models/online_modal.dart';
+import 'package:songhogame/models/online_page.dart';
 import 'package:songhogame/views/Start.dart';
 import 'package:songhogame/views/login_screen.dart';
 
@@ -34,13 +34,18 @@ void checkInternetAndOpenModal(BuildContext context) async {
 
   if (connectivityResult == ConnectivityResult.mobile ||
       connectivityResult == ConnectivityResult.wifi) {
+
+        
     if (kDebugMode) {
       print('Connecté à Internet');
     }
     // Récupère l'utilisateur actuellement connecté
     if (currentUser != null) {
-      // Affiche le BottomSheet si l'utilisateur est connecté
-      openModal(context);
+      // Affiche le OnlinePage si l'utilisateur est connecté
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => OnlinePage()),
+      );
     } else {
       // Redirige vers l'écran de connexion si l'utilisateur n'est pas connecté
       Navigator.pushReplacement(

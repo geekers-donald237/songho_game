@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 //COLORS
-const backgroundColor = Color.fromARGB(255, 24, 24, 24);
+const backgroundColor = Colors.lightGreen;
 var buttonColor = Colors.blue[400];
 const borderColor = Colors.white;
 

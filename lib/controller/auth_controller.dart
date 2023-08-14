@@ -23,7 +23,7 @@ class AuthController extends GetxController {
 
   _selectInitialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => Start());
+      Get.offAll(() => LogInScreen());
     } else {
       Get.offAll(() => Start());
     }
@@ -44,6 +44,7 @@ class AuthController extends GetxController {
             .collection('players')
             .doc(credential.user!.uid)
             .set(user.toJson());
+        Get.to(() => Start());
       } else {
         Get.snackbar('Register Failed', 'Please enter all credientials');
       }
@@ -58,7 +59,7 @@ class AuthController extends GetxController {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
             email: email.trim(), password: password);
-        print('Success');
+        Get.to(() => Start());
       } else {
         Get.snackbar('Login Failed', 'Please enter valid email and password');
       }

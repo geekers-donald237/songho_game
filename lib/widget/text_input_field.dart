@@ -20,8 +20,11 @@ class TextInputFeild extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
-        prefixIcon: Icon(icon),
-        labelStyle: const TextStyle(fontSize: 20),
+        prefixIcon: Icon(
+          icon,
+          color: Colors.blueAccent,
+        ),
+        labelStyle: const TextStyle(fontSize: 20, color: Colors.white),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: borderColor),
         ),

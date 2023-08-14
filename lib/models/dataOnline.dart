@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:songhogame/models/online_modal.dart';
+import 'package:songhogame/models/online_page.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
 
 // Déclaration des variables globales

@@ -156,7 +156,7 @@ class _OnePlayersState extends State<OnePlayers> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     setState(() {
-      message = "patientez....,L'ordinateur joue";
+      message = "Patientez....,L'ordinateur joue";
     });
     _computerDistributePawns();
   }
@@ -243,6 +243,7 @@ class _OnePlayersState extends State<OnePlayers> {
       } else if (cpt1 != 0 && cpt2 == 0) {
         messageSuccess = "Victoire !!!";
         gameController.WinnerSms(messageSuccess, context);
+        
       }
     });
   }

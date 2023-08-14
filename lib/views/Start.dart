@@ -1,13 +1,6 @@
 import 'package:get/get.dart';
-import 'package:marquee/marquee.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:songhogame/onboarding/Regle.dart';
-import 'package:songhogame/modejeu/OnePlayers.dart';
-import 'package:songhogame/modejeu/TwoPlayers.dart';
 import 'package:songhogame/views/login_screen.dart';
-import 'package:songhogame/controller/internet.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:songhogame/views/menuJeu.dart';
@@ -19,7 +12,6 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   final gameController = GameController();
-  bool showContainer = false;
 
   @override
   void initState() {

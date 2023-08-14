@@ -7,20 +7,27 @@ import 'package:songhogame/widget/text_input_field.dart';
 
 import '../controller/auth_controller.dart';
 
-class LogInScreen extends StatelessWidget {
+class LogInScreen extends StatefulWidget {
   LogInScreen({super.key});
+  static AuthController authControllerInstance = Get.find();
+
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
-  static AuthController authControllerInstance = Get.find();
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color.fromARGB(255, 119, 95, 86),
       body: Container(
-          
           margin: const EdgeInsets.symmetric(horizontal: 5),
           alignment: Alignment.center,
           child: SingleChildScrollView(
@@ -62,12 +69,7 @@ class LogInScreen extends StatelessWidget {
                   icon: Icons.email,
                 ),
                 const SizedBox(height: 15),
-                TextInputFeild(
-                  controller: _passwordController,
-                  labelText: 'Password',
-                  icon: Icons.password,
-                  isObscure: true,
-                ),
+                buildPasswordField(),
                 const SizedBox(height: 15),
                 Container(
                   width: mediaQuery.width * 0.98,
@@ -76,8 +78,8 @@ class LogInScreen extends StatelessWidget {
                       color: buttonColor,
                       borderRadius: BorderRadius.circular(10)),
                   child: InkWell(
-                    onTap: () => authControllerInstance.login(
-                        _emailController.text, _passwordController.text),
+                    onTap: () => LogInScreen.authControllerInstance
+                        .login(_emailController.text, _passwordController.text),
                     child: const Center(
                         child: Text(
                       'Login',
@@ -92,7 +94,7 @@ class LogInScreen extends StatelessWidget {
                   children: [
                     const Text(
                       'Don\'t have an account?',
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     const SizedBox(width: 5),
                     InkWell(
@@ -109,6 +111,38 @@ class LogInScreen extends StatelessWidget {
               ],
             ),
           )),
+    );
+  }
+
+  Widget buildPasswordField() {
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: !_passwordVisible,
+      decoration: InputDecoration(
+        labelStyle: const TextStyle(fontSize: 20, color: Colors.white),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: borderColor),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: borderColor),
+        ),
+        prefixIcon: Icon(
+          Icons.password,
+          color: Colors.blueAccent,
+        ),
+        labelText: 'Password',
+        suffixIcon: IconButton(
+          icon: Icon(
+            _passwordVisible ? Icons.visibility_off : Icons.visibility,
+            color: Colors.blueAccent,
+          ),
+          onPressed: () {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          },
+        ),
+      ),
     );
   }
 }
