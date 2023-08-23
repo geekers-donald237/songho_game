@@ -19,11 +19,10 @@ String generateHashCode() {
 
   // Limiter le hashcode à 4 chiffres
   hashCode = hashCode.substring(0, 4);
+  print(hashCode);
 
   return hashCode;
 }
-
-
 
 /* void share() async {
 Share.share('check out my website https://example.com');

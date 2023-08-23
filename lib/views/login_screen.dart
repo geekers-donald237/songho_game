@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:songhogame/constants.dart';
@@ -78,8 +79,15 @@ class _LogInScreenState extends State<LogInScreen> {
                       color: buttonColor,
                       borderRadius: BorderRadius.circular(10)),
                   child: InkWell(
-                    onTap: () => LogInScreen.authControllerInstance
-                        .login(_emailController.text, _passwordController.text),
+                    onTap: () async {
+                      EasyLoading.show(status: '');
+                      await Future.delayed(Duration(seconds: 2));
+
+                      LogInScreen.authControllerInstance.login(
+                          _emailController.text, _passwordController.text);
+
+                      EasyLoading.dismiss();
+                    },
                     child: const Center(
                         child: Text(
                       'Login',

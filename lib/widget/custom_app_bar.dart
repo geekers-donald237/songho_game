@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:songhogame/models/online_page.dart';
+import 'package:songhogame/views/menuJeu.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CollectionReference playersCollection =
@@ -32,17 +33,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final data = snapshot.data!.data();
-                final String? photoUrl = data?['photoUrl'];
-                final String? username = data?['usernameP1'];
+                String? downloadURL = data?['pathPhoto'];
+                String? username = data?['usernameP1'];
 
                 return Padding(
-                  padding: const EdgeInsets.only(right: 0),
+                  padding: EdgeInsets.only(right: 0),
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 0),
+                        padding: EdgeInsets.only(right: 0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               username ?? '',
@@ -63,25 +64,54 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       CircleAvatar(
                         radius: 20,
-                        backgroundImage: photoUrl != null
-                            ? NetworkImage(
-                                    'https://example.com/path/to/image.jpg')
-                                as ImageProvider<Object>
-                            : AssetImage('assets/images/google.png'),
+                        backgroundColor: Colors.black,
+                        child: Center(
+                          child: downloadURL != null
+                              ? ClipOval(
+                                  child: Image.network(
+                                    downloadURL,
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : IconButton(
+                                  icon: Icon(
+                                    Icons.person,
+                                    size: 25,
+                                    color: Colors.white, 
+                                  ),
+                                  onPressed: () {},
+                                ),
+                        ),
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(
+                        width: 20,
+                      ),
                     ],
                   ),
                 );
               } else if (snapshot.hasError) {
                 return Text('Error');
+                
               }
               return SizedBox.shrink();
             },
           ),
         ],
+        leading: IconButton(
+            onPressed: () {
+              Get.to(() => MenuJeu());
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
       ),
     );
   }

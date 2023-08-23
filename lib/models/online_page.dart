@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/gameController.dart';
-import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
-import 'package:songhogame/views/Start.dart';
 import 'package:songhogame/views/menuJeu.dart';
 import 'package:songhogame/widget/custom_app_bar.dart';
 
@@ -16,16 +16,10 @@ class OnlinePage extends StatefulWidget {
   State<OnlinePage> createState() => _OnlinePageState();
 }
 
-var user = FirebaseAuth.instance.currentUser!;
-String usernameP1 = '';
-String usernameP2 = '';
-bool online = false;
-
 class _OnlinePageState extends State<OnlinePage> {
   final gameController = GameController();
-  List<String> username = [];
-
   TextEditingController codeController = TextEditingController();
+  List<String> username = [];
   bool isEditable = true;
   bool joinEnabled = true;
   bool lancerEnabled = true;
@@ -34,11 +28,11 @@ class _OnlinePageState extends State<OnlinePage> {
   @override
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
-    String hashCode = '';
+
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 218, 217, 217),
       appBar: CustomAppBar(),
       body: Container(
-        //height: mediaQuery.height * 20,
         padding: EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
@@ -56,6 +50,11 @@ class _OnlinePageState extends State<OnlinePage> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
+                  /* setState(() {
+                    isEditable = false;
+                    joinEnabled = false;
+                    hashCode = generateHashCode();
+                  }); */
                   isButtonDisabled ? null : () {};
                   ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -64,24 +63,16 @@ class _OnlinePageState extends State<OnlinePage> {
                         : Colors.grey,
                   );
 
-                  lancerEnabled
-                      ? () {
-                          setState(() {
-                            joinEnabled = false;
-                          });
-                        }
-                      : null;
                   setState(() {
                     hashCode = generateHashCode();
-                    isEditable = false;
                   });
-                  saveHashCode(hashCode, user.uid);
-                  createAndSaveFirebaseTable(user.uid);
+                  /* saveHashCode(hashCode, user.uid); */
+                  /*createAndSaveFirebaseTable(user.uid);
                   retrieveFirebaseTable(user.uid);
                   username = await getUsernameFromFirebase(user.uid);
                   setState(() {
                     usernameP1 = username[0];
-                  });
+                  }); */
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: buttonColor,
@@ -110,6 +101,7 @@ class _OnlinePageState extends State<OnlinePage> {
                     child: Text(
                       'Code de la partie : $hashCode',
                       style: TextStyle(
+                        backgroundColor: Colors.amber,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -283,5 +275,119 @@ class _OnlinePageState extends State<OnlinePage> {
         ),
       ),
     );
+  }
+}
+
+var user = FirebaseAuth.instance.currentUser!;
+String usernameP1 = '';
+String usernameP2 = '';
+
+bool online = false;
+
+String hashCode = '';
+
+String inputValue = '';
+
+// Fonction pour récupérer la valeur saisie dans le TextField
+String getValueFromTextField(String value) {
+  inputValue = value;
+  //print(inputValue);
+
+  return inputValue;
+}
+
+void onPressedButton() async {
+  final inputHashCode = getValueFromTextField(
+      inputValue); // Récupère la valeur saisie dans le TextField
+  final result = await saveUidIfHashCodeExists(
+      inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
+
+  if (result != null) {
+    print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode existe et que l'UID a été enregistré
+  } else {
+    print('Le hashCode n\'existe pas dans Firebase.');
+    // Effectuez ici les actions à réaliser lorsque le hashCode n'existe pas
+  }
+}
+
+void performFirebaseActions() async {
+  // Afficher l'indicateur de chargement
+  EasyLoading.show(status: 'Recherche en cours...');
+
+  try {
+    //saveUidIfHashCodeExists(inputValue, user.uid);
+/*     getUsernameFromFirebase(user.uid);
+    saveUsernameIfHashCodeExists(hashCode, user.uid); */
+    //saveUsernameIfHashCodeExists(inputValue, user.uid);
+    // Simuler une pause pour représenter le temps d'exécution de la recherche
+    await Future.delayed(Duration(seconds: 4));
+
+    // Afficher un message de succès
+    EasyLoading.showSuccess('Reussie');
+  } catch (e) {
+    // Afficher un message d'erreur en cas d'échec
+    EasyLoading.showError('Code absent');
+  }
+
+  // Masquer l'indicateur de chargement une fois la recherche terminée
+  EasyLoading.dismiss();
+}
+
+// CARD FOR PLAYERS INFOS
+Card buildUserInfoCard(String useName) {
+  return Card(
+    child: ListTile(
+      title: Text(
+        ': $useName',
+        style: TextStyle(
+          fontSize: 30,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      leading: Icon(
+        Icons.person_add_alt_1_rounded,
+        size: 35,
+        color: Colors.black,
+      ),
+    ),
+    color: Colors.white,
+  );
+}
+
+Future<List<String>> getUsernameFromFirebase(String uid) async {
+  // Récupérer la référence de la collection "players" dans Firebase
+  CollectionReference playersCollection =
+      FirebaseFirestore.instance.collection('players');
+
+  // Récupérer le document correspondant à l'utilisateur donné
+  DocumentSnapshot document = await playersCollection.doc(uid).get();
+
+  // Initialiser une liste pour stocker les noms d'utilisateur
+  List<String> usernames = [];
+
+  // Vérifier si le document existe
+  if (document.exists) {
+    // Récupérer les données du document
+    Map<String, dynamic> userData = document.data() as Map<String, dynamic>;
+
+    // Récupérer le nom d'utilisateur P2 et l'ajouter à la liste
+    if (userData.containsKey('usernameP1')) {
+      String usernameP1 = userData['usernameP1'];
+      usernames.add(usernameP1);
+    }
+
+    // Récupérer le nom d'utilisateur P1 et l'ajouter à la liste
+    if (userData.containsKey('usernameP1')) {
+      String usernameP2 = userData['usernameP1'];
+      usernames.add(usernameP2);
+    }
+
+    // Retourner la liste de noms d'utilisateur
+    return usernames;
+  } else {
+    // Retourner une liste vide si l'utilisateur n'existe pas
+    return usernames;
   }
 }

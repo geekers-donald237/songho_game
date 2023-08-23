@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
@@ -18,6 +19,7 @@ String J1 = usernameP1;
 class _OnlineState extends State<Online> {
   late List<int> _board;
   late List<Color> _colorList;
+
   @override
   void initState() {
     super.initState();
@@ -361,5 +363,42 @@ class _OnlineState extends State<Online> {
         ),
       ),
     );
+  }
+
+  Future<void> retrieveFirebaseTable(String uid) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference playersCollectionRef = firestore.collection('players');
+    DocumentReference documentRef = playersCollectionRef.doc(uid);
+    CollectionReference onlinePartCollectionRef =
+        documentRef.collection('onlinepart');
+
+    try {
+      DocumentSnapshot docSnapshot =
+          await onlinePartCollectionRef.doc(uid).get();
+      if (docSnapshot.exists) {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        List<int> tableData =
+            List<int>.from(data['tableData'] as List<dynamic>);
+        List<String> colorList =
+            List<String>.from(data['colorList'] as List<dynamic>);
+        List<Color> colors =
+            colorList.map((hex) => Color(int.parse(hex, radix: 16))).toList();
+
+        setState(() {
+          _board = tableData;
+          _colorList = colors;
+        });
+
+        print('tableData: $tableData');
+        print('colorList: $colorList');
+        print('colors: $colors');
+      } else {
+        print(
+            "Le document n'existe pas dans la sous-collection 'onlinepart' de Firebase.");
+      }
+    } catch (error) {
+      print(
+          "Une erreur s'est produite lors de la récupération des données depuis Firebase : $error");
+    }
   }
 }

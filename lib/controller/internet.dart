@@ -27,7 +27,7 @@ import 'package:songhogame/views/login_screen.dart';
   }
 } */
 
-void checkInternetAndOpenModal(BuildContext context) async {
+void checkInternetAndOpenPage(BuildContext context) async {
   var connectivityResult = await (Connectivity().checkConnectivity());
   FirebaseAuth auth = FirebaseAuth.instance;
   User? currentUser = auth.currentUser;

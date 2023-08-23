@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:songhogame/constants.dart';
@@ -12,24 +13,20 @@ class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key, this.onTap});
   final Function()? onTap;
 
-  static AuthController authControllerInstance = Get.find();
-
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _userNameController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
+  static AuthController authControllerInstance = Get.find();
   bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
-    bool _passwordVisible = false;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 119, 95, 86),
@@ -57,12 +54,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 15),
               Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: SvgPicture.asset(
-                      'assets/images/game.svg', // Chemin vers votre fichier SVG
-                      width: 150, // Largeur souhaitée de l'image
-                      height: 150, // Hauteur souhaitée de l'image
+                  const CircleAvatar(
+                    radius: 64,
+                    backgroundImage: NetworkImage(
+                        'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
+                    backgroundColor: Colors.black,
+                  ),
+                  Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      onPressed: () => authControllerInstance.pickImage(),
+                      icon: const Icon(
+                        Icons.add_a_photo,
+                      ),
                     ),
                   ),
                 ],
@@ -89,11 +94,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: buttonColor,
                     borderRadius: BorderRadius.circular(10)),
                 child: InkWell(
-                  onTap: () => SignUpScreen.authControllerInstance.register(
-                    _userNameController.text,
-                    _emailController.text,
-                    _passwordController.text,
-                  ),
+                  onTap: () async {
+                    EasyLoading.show(status: '');
+                    await Future.delayed(Duration(seconds: 2));
+
+                    authControllerInstance.register(
+                      _userNameController.text,
+                      _emailController.text,
+                      _passwordController.text,
+                      authControllerInstance.profilePhoto,
+                    );
+
+                    EasyLoading.dismiss();
+                  },
                   child: const Center(
                       child: Text(
                     'Register',
@@ -122,9 +135,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: buttonColor,
                     borderRadius: BorderRadius.circular(10)),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    EasyLoading.show(status: '');
+                    await Future.delayed(Duration(seconds: 2));
+
                     AuthService().signInWithGoogle();
                     AuthService().saveGoogleUserInfoToFirestore(user);
+
+                    EasyLoading.dismiss();
+                    
+
                   },
                   child: Center(
                     child: Row(

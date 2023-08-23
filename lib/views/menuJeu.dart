@@ -1,17 +1,11 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:marquee/marquee.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:songhogame/constants.dart';
-import 'package:songhogame/onboarding/Regle.dart';
 import 'package:songhogame/modejeu/OnePlayers.dart';
 import 'package:songhogame/modejeu/TwoPlayers.dart';
 import 'package:songhogame/views/Start.dart';
-import 'package:songhogame/views/login_screen.dart';
 import 'package:songhogame/controller/internet.dart';
 import 'package:songhogame/controller/gameController.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class MenuJeu extends StatefulWidget {
   @override
@@ -122,8 +116,11 @@ class _MenuJeuState extends State<MenuJeu> {
                               "Play with any friends",
                               style: TextStyle(color: Colors.white),
                             ),
-                            onTap: () {
-                              checkInternetAndOpenModal(context);
+                            onTap: () async {
+                              EasyLoading.show(status: '');
+                              await Future.delayed(Duration(seconds: 2));
+                              checkInternetAndOpenPage(context);
+                              EasyLoading.dismiss();
                             },
                           ),
                           ListTile(
