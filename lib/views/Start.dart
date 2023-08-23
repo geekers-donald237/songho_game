@@ -1,12 +1,10 @@
-import 'dart:async';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:songhogame/views/login_screen.dart';
-import 'package:songhogame/controller/gameController.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:songhogame/views/menuJeu.dart';
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:get/get.dart';
+import 'package:songhogame/views/login_screen.dart';
+import 'package:songhogame/views/menuJeu.dart';
 
 class Start extends StatefulWidget {
   @override
@@ -14,31 +12,15 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
-  final gameController = GameController();
-
   bool adVisible = false;
 
   @override
   void initState() {
     super.initState();
-    // Affiche la publicité au début
-    Future.delayed(Duration(seconds: 3), () {
+    // Montre la publicité après 5 secondes
+    Future.delayed(Duration(seconds: 6), () {
       setState(() {
-        adVisible = true;
-      });
-    });
-
-    // Masque la publicité après 3 secondes
-    Future.delayed(Duration(seconds: 5), () {
-      setState(() {
-        adVisible = false;
-      });
-    });
-
-    // Affiche la publicité à nouveau après 8 secondes
-    Future.delayed(Duration(seconds: 11), () {
-      setState(() {
-        adVisible = true;
+        adVisible = true; // Affiche la publicité
       });
     });
   }
@@ -48,8 +30,7 @@ class _StartState extends State<Start> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor:
-            Color.fromARGB(255, 119, 95, 86), // Couleur de fond de la page
+        backgroundColor: Color.fromARGB(255, 119, 95, 86),
         body: SingleChildScrollView(
           child: Container(
             child: Center(
@@ -57,15 +38,13 @@ class _StartState extends State<Start> {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: <Widget>[
-                    SizedBox(
-                      height: 120,
-                    ),
+                    SizedBox(height: 120),
                     Text(
                       'SONGHO',
                       style: TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white60, // Couleur du texte en blanc
+                        color: Colors.white60,
                         shadows: [
                           Shadow(
                             color: Colors.black,
@@ -75,15 +54,13 @@ class _StartState extends State<Start> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 12,
-                    ),
+                    SizedBox(height: 12),
                     Text(
                       'Venez découvrir le jeu Songho, originaire du Centre Cameroun',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white70, // Couleur du texte en blanc
+                        color: Colors.white70,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -125,8 +102,7 @@ class _StartState extends State<Start> {
                       child: Stack(
                         children: [
                           Align(
-                            alignment:
-                                Alignment.center, // Centre le texte "Jouer"
+                            alignment: Alignment.center,
                             child: Text(
                               'Jouer',
                               style: TextStyle(
@@ -137,8 +113,7 @@ class _StartState extends State<Start> {
                             ),
                           ),
                           Align(
-                            alignment: Alignment
-                                .centerRight, // Place l'icône à la fin du bouton
+                            alignment: Alignment.centerRight,
                             child: Icon(
                               Icons.arrow_forward_ios_rounded,
                               size: 30,
@@ -148,9 +123,7 @@ class _StartState extends State<Start> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
+                    SizedBox(height: 30),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
@@ -169,8 +142,7 @@ class _StartState extends State<Start> {
                       child: Stack(
                         children: [
                           Align(
-                            alignment:
-                                Alignment.center, // Centre le texte "Jouer"
+                            alignment: Alignment.center,
                             child: Text(
                               'Connexion',
                               style: TextStyle(
@@ -181,53 +153,24 @@ class _StartState extends State<Start> {
                             ),
                           ),
                           Align(
-                            alignment: Alignment
-                                .centerRight, // Place l'icône à la fin du bouton
+                            alignment: Alignment.centerRight,
                             child: Icon(
                               Icons.private_connectivity_rounded,
                               size: 25,
                               color: Colors.white,
                             ),
                           ),
-
-                          /* _isAdLoaded
-                              ? Container(
-                                  height: _bannerAd.size.height.toDouble(),
-                                  width: _bannerAd.size.width.toDouble(),
-                                  child: AdWidget(ad: _bannerAd),
-                                )
-                              : SizedBox(), */
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Container(
-                      child: FutureBuilder(
-                        // Utilisez `adVisible` pour afficher ou masquer la publicité
-                        future: Future.delayed(Duration(seconds: 8)),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          } else {
-                            if (snapshot.hasError) {
-                              return Text('Erreur de chargement');
-                            } else {
-                              return adVisible
-                                  ? AdmobBanner(
-                                      adUnitId:
-                                          "ca-app-pub-3940256099942544/6300978111",
-                                      adSize: AdmobBannerSize.BANNER,
-                                    )
-                                  : Container();
-                            }
-                          }
-                        },
+                    SizedBox(height: 3),
+                    if (adVisible)
+                      Container(
+                        child: AdmobBanner(
+                          adUnitId: "ca-app-pub-3940256099942544/6300978111",
+                          adSize: AdmobBannerSize.BANNER,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
