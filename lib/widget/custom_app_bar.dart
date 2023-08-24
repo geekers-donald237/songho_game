@@ -4,6 +4,13 @@ import 'package:get/get.dart';
 import 'package:songhogame/models/online_page.dart';
 import 'package:songhogame/views/menuJeu.dart';
 
+class UserUtils {
+  static String userName = '';
+}
+
+String u = '';
+
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CollectionReference playersCollection =
       FirebaseFirestore.instance.collection('players');
@@ -38,6 +45,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (snapshot.hasData) {
                 final data = snapshot.data!.data();
                 String? downloadURL = data?['pathPhoto'];
+                u = UserUtils.userName = (data?['usernameP1'] as String?)!;
                 String? username = data?['usernameP1'];
 
                 return Padding(

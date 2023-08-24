@@ -51,7 +51,25 @@ class _TwoPlayersState extends State<TwoPlayers> {
             ),
             color: Colors.black,
           ),
-          child: CustomDrawer(),
+          child: CustomDrawer(
+            ontap: () {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
+              Future.delayed(Duration(seconds: 2), () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => TwoPlayers()),
+                  (route) => false,
+                );
+              });
+            },
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songhogame/models/online_page.dart';
 import 'package:songhogame/widget/player1.dart';
 import 'package:songhogame/widget/player2.dart';
 
@@ -24,16 +25,20 @@ class GameInfoBar extends StatelessWidget {
           Player1(
             icon: Icons.person,
             score: scorePlayer,
-            playerName: 'J1',
+            playerName: usernameP1,
           ),
-          Text(
-            message,
-            style: TextStyle(
-              fontSize:
-                  14, // Taille de police plus petite que l'original (à ajuster selon vos préférences)
-              fontWeight:
-                  FontWeight.bold, // Texte en gras pour attirer l'attention
-              color: Colors.black, // Couleur du texte
+          Container(
+            padding: EdgeInsets.all(8), // Espacement interne du cadre
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 218, 203, 162), // Couleur du cadre
+            ),
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
           Player2(

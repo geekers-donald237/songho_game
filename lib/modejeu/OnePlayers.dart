@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:songhogame/controller/gameController.dart';
+import 'package:songhogame/widget/custom_app_bar.dart';
 import 'package:songhogame/widget/drawer.dart';
 import 'package:songhogame/widget/gameInfo.dart';
 
@@ -28,7 +29,7 @@ class _OnePlayersState extends State<OnePlayers> {
 
   int scorePlayer = 0;
   int scoreComputer = 0;
-  String message = "A vous de commencer";
+  String message = "$u à vous de commencer";
   int gagnant = -1;
   String winner = "";
   String messageSuccess = "";
@@ -38,10 +39,30 @@ class _OnePlayersState extends State<OnePlayers> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 119, 95, 86),
       appBar: AppBar(
-        title: const Center(child: Text('Jeu de Songho')),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(
+        ontap: () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          );
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => OnePlayers()),
+              (route) => false,
+            );
+          });
+        },
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -50,9 +71,10 @@ class _OnePlayersState extends State<OnePlayers> {
                 height: 5,
               ),
               GameInfoBar(
-                  scorePlayer: scorePlayer,
-                  message: message,
-                  scoreComputer: scoreComputer),
+                scorePlayer: scorePlayer,
+                message: message,
+                scoreComputer: scoreComputer,
+              ),
               Container(
                 child: GridView.count(
                     padding: EdgeInsets.all(30),
@@ -154,7 +176,7 @@ class _OnePlayersState extends State<OnePlayers> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     setState(() {
-      message = "patientez....,L'ordinateur joue";
+      message = "Patientez...., L'ordinateur joue";
     });
     _computerDistributePawns();
   }
@@ -211,7 +233,7 @@ class _OnePlayersState extends State<OnePlayers> {
     }
 
     setState(() {
-      message = "A vous de jouer..";
+      message = "$u à vous de jouer";
       _jeuEstEnCours = false;
     });
 

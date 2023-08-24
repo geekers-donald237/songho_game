@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:songhogame/controller/auth_controller.dart';
-import 'package:songhogame/modejeu/OnePlayers.dart';
 import 'package:songhogame/views/Start.dart';
 import 'customListtitle.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  const CustomDrawer({super.key, required this.ontap});
+  final VoidCallback ontap;
 
   @override
   Widget build(BuildContext context) {
@@ -35,21 +35,7 @@ class CustomDrawer extends StatelessWidget {
             leadingIcon: Icons.cached_outlined,
             title: "Recommencer",
             onTap: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              );
-              Future.delayed(Duration(seconds: 2), () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const OnePlayers()),
-                  (route) => false,
-                );
-              });
+              ontap;
             },
           ),
           CustomListTile(

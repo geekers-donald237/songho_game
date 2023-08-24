@@ -27,10 +27,20 @@ class Player2 extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(
-              icon,
-              size: 28,
-              color: Colors.white,
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white12,
+                  width: 2,
+                ),
+                color: Colors.white,
+              ),
+              child: Icon(
+                icon,
+                size: 28,
+                color: Colors.red,
+              ),
             ),
             Expanded(
               child: Column(

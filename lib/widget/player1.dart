@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songhogame/widget/custom_app_bar.dart';
 
 class Player1 extends StatelessWidget {
   final int score;
@@ -27,28 +28,42 @@ class Player1 extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(
-              icon,
-              size: 28,
-              color: Colors.white,
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white12,
+                  width: 2,
+                ),
+                color: Colors.white,
+              ),
+              child: Icon(
+                icon,
+                size: 28,
+                color: Colors.blue,
+              ),
             ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    playerName,
+                    u,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
+                  SizedBox(
+                    height: 4,
+                  ),
                   Text(
                     'Score: $score',
                     style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,),
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
