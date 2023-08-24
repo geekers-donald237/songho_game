@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Player extends StatelessWidget {
+class Player2 extends StatelessWidget {
   final int score;
   final IconData icon;
   final String playerName;
 
-  const Player({
+  const Player2({
     Key? key,
     required this.score,
     required this.icon,
@@ -15,7 +15,7 @@ class Player extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.grey[300],
+      color: Colors.red,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
@@ -27,7 +27,11 @@ class Player extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(icon, size: 28),
+            Icon(
+              icon,
+              size: 28,
+              color: Colors.white,
+            ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -36,11 +40,15 @@ class Player extends StatelessWidget {
                     playerName,
                     style: TextStyle(
                       fontSize: 14,
+                      color: Colors.white,
                     ),
                   ),
                   Text(
                     'Score: $score',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ],
               ),

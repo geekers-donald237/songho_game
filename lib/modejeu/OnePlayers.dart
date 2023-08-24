@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/widget/drawer.dart';
 import 'package:songhogame/widget/gameInfo.dart';
@@ -11,8 +11,6 @@ class OnePlayers extends StatefulWidget {
   @override
   State<OnePlayers> createState() => _OnePlayersState();
 }
-
-
 
 class _OnePlayersState extends State<OnePlayers> {
   late List<int> _board;
@@ -39,57 +37,55 @@ class _OnePlayersState extends State<OnePlayers> {
   final gameController = GameController();
 
   Widget build(BuildContext context) {
-    return Container(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Center(child: Text('Jeu de Songho')),
-        ),
-        drawer: CustomDrawer(),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 5,
-                ),
-                GameInfoBar(
-                    scorePlayer: scorePlayer,
-                    message: message,
-                    scoreComputer: scoreComputer),
-                Container(
-                  child: GridView.count(
-                      padding: EdgeInsets.all(30),
-                      primary: false,
-                      shrinkWrap: true,
-                      crossAxisCount: 7,
-                      children: <Widget>[
-                        for (int i = 6; i >= 0; i--)
-                          Row(
-                            children: [
-                              buildCell(i, Colors.grey[300]!),
-                              SizedBox(
-                                height: 10,
-                                width: 10,
-                              ),
-                            ],
-                          ),
-                        for (int i = 7; i <= 13; i++)
-                          Row(
-                            children: [
-                              buildCell(i, Colors.grey[300]!),
-                              SizedBox(
-                                height: 10,
-                                width: 10,
-                              ),
-                            ],
-                          ),
-                      ]),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(child: Text('Jeu de Songho')),
+      ),
+      drawer: CustomDrawer(),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              GameInfoBar(
+                  scorePlayer: scorePlayer,
+                  message: message,
+                  scoreComputer: scoreComputer),
+              Container(
+                child: GridView.count(
+                    padding: EdgeInsets.all(30),
+                    primary: false,
+                    shrinkWrap: true,
+                    crossAxisCount: 7,
+                    children: <Widget>[
+                      for (int i = 6; i >= 0; i--)
+                        Row(
+                          children: [
+                            buildCell(i, Colors.grey[300]!),
+                            SizedBox(
+                              height: 10,
+                              width: 10,
+                            ),
+                          ],
+                        ),
+                      for (int i = 7; i <= 13; i++)
+                        Row(
+                          children: [
+                            buildCell(i, Colors.grey[300]!),
+                            SizedBox(
+                              height: 10,
+                              width: 10,
+                            ),
+                          ],
+                        ),
+                    ]),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
           ),
         ),
       ),
@@ -158,7 +154,7 @@ class _OnePlayersState extends State<OnePlayers> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     setState(() {
-      message = "Patientez....,L'ordinateur joue";
+      message = "patientez....,L'ordinateur joue";
     });
     _computerDistributePawns();
   }
@@ -214,10 +210,10 @@ class _OnePlayersState extends State<OnePlayers> {
       currentComputerIndex--;
     }
 
-     setState(() {
-        message = "A vous de jouer..";
-        _jeuEstEnCours = false;
-      });
+    setState(() {
+      message = "A vous de jouer..";
+      _jeuEstEnCours = false;
+    });
 
     setState(() {
       if (scorePlayer > 35 && scoreComputer <= 35) {
@@ -245,7 +241,6 @@ class _OnePlayersState extends State<OnePlayers> {
       } else if (cpt1 != 0 && cpt2 == 0) {
         messageSuccess = "Victoire !!!";
         gameController.WinnerSms(messageSuccess, context);
-        
       }
     });
   }

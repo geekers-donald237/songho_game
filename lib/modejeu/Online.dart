@@ -4,7 +4,8 @@ import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/models/online_page.dart';
 import 'package:songhogame/widget/drawer.dart';
-import 'package:songhogame/widget/player.dart';
+import 'package:songhogame/widget/player1.dart';
+import 'package:songhogame/widget/player2.dart';
 
 class Online extends StatefulWidget {
   const Online({Key? key}) : super(key: key);
@@ -61,7 +62,7 @@ class _OnlineState extends State<Online> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Player(
+                    Player1(
                       score: score1,
                       icon: Icons.people,
                       playerName: J1,
@@ -76,7 +77,7 @@ class _OnlineState extends State<Online> {
                         color: Colors.black, // Couleur du texte
                       ),
                     ),
-                    Player(
+                    Player2(
                       score: score2,
                       icon: Icons.people,
                       playerName: J2,

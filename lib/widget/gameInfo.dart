@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:songhogame/widget/player.dart';
+import 'package:songhogame/widget/player1.dart';
+import 'package:songhogame/widget/player2.dart';
 
 class GameInfoBar extends StatelessWidget {
   const GameInfoBar({
@@ -20,7 +21,7 @@ class GameInfoBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Player(
+          Player1(
             icon: Icons.person,
             score: scorePlayer,
             playerName: 'J1',
@@ -35,7 +36,7 @@ class GameInfoBar extends StatelessWidget {
               color: Colors.black, // Couleur du texte
             ),
           ),
-          Player(
+          Player2(
             icon: Icons.laptop_chromebook,
             score: scoreComputer,
             playerName: 'IA',

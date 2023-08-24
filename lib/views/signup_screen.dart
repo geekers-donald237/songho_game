@@ -40,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Text(
                 'Songho Game',
                 style: TextStyle(
-                    color: buttonColor,
+                    color: Colors.black,
                     fontWeight: FontWeight.w900,
                     fontSize: 50),
               ),
@@ -67,6 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onPressed: () => authControllerInstance.pickImage(),
                       icon: const Icon(
                         Icons.add_a_photo,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -91,7 +92,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: mediaQuery.width * 0.98,
                 height: mediaQuery.height * 0.08,
                 decoration: BoxDecoration(
-                    color: buttonColor,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2.0,
+                    ),
+                    color: Color.fromARGB(255, 218, 203, 162),
                     borderRadius: BorderRadius.circular(10)),
                 child: InkWell(
                   onTap: () async {
@@ -132,19 +137,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: mediaQuery.width * 0.98,
                 height: mediaQuery.height * 0.08,
                 decoration: BoxDecoration(
-                    color: buttonColor,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2.0,
+                    ),
+                    color: Color.fromARGB(255, 218, 203, 162),
                     borderRadius: BorderRadius.circular(10)),
                 child: InkWell(
                   onTap: () async {
                     EasyLoading.show(status: '');
-                    await Future.delayed(Duration(seconds: 2));
 
                     AuthService().signInWithGoogle();
                     AuthService().saveGoogleUserInfoToFirestore(user);
 
                     EasyLoading.dismiss();
-                    
-
                   },
                   child: Center(
                     child: Row(
@@ -210,13 +216,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         prefixIcon: Icon(
           Icons.password,
-          color: Colors.blueAccent,
+          color: Color.fromARGB(255, 218, 203, 162),
         ),
         labelText: 'Password',
         suffixIcon: IconButton(
           icon: Icon(
             _passwordVisible ? Icons.visibility_off : Icons.visibility,
-            color: Colors.blueAccent,
+            color: Color.fromARGB(255, 218, 203, 162),
           ),
           onPressed: () {
             setState(() {

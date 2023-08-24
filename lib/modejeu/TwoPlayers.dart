@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/widget/drawer.dart';
-import 'package:songhogame/widget/player.dart';
+import 'package:songhogame/widget/player1.dart';
+import 'package:songhogame/widget/player2.dart';
 
 class TwoPlayers extends StatefulWidget {
   const TwoPlayers({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _TwoPlayersState extends State<TwoPlayers> {
   void initState() {
     super.initState();
     // initialisation du plateau avec 5 billes par case
-    _board = List<int>.filled(14, 4);
+    _board = List<int>.filled(14, 5);
     // _board = [1, 3, 2, 6, 2, 2, 2, 2, 3, 2, 4, 4, 2, 3];
 
     _colorList = List<Color>.generate(14, (index) => Colors.grey[300]!);
@@ -24,7 +25,7 @@ class _TwoPlayersState extends State<TwoPlayers> {
 
   int score1 = 0;
   int score2 = 0;
-  String message = "Joueur 1 a vous de commencer";
+  String message = "Joueur 1 à vous de commencer";
   String statuts = "J1";
   int statut_joueur = 1;
   int gagnant = -1;
@@ -38,79 +39,90 @@ class _TwoPlayersState extends State<TwoPlayers> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
+        backgroundColor: Color.fromARGB(255, 119, 95, 86),
         appBar: AppBar(
-          title: const Center(child: Text('Jeu de Songho')),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
-        drawer: CustomDrawer(),
+        drawer: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color.fromARGB(255, 218, 203, 162),
+            ),
+            color: Colors.black,
+          ),
+          child: CustomDrawer(),
+        ),
         body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 5,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Player(
-                        score: score1,
-                        icon: Icons.people,
-                        playerName: 'J1',
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 2,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Player1(
+                      score: score1,
+                      icon: Icons.person_rounded,
+                      playerName: 'J1',
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8), // Espacement interne du cadre
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(
+                            255, 218, 203, 162), // Couleur du cadre
                       ),
-                      Text(
+                      child: Text(
                         message,
                         style: TextStyle(
-                          fontSize:
-                              14, // Taille de police plus petite que l'original (à ajuster selon vos préférences)
-                          fontWeight: FontWeight
-                              .bold, // Texte en gras pour attirer l'attention
-                          color: Colors.black, // Couleur du texte
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
-                      Player(
-                        score: score2,
-                        icon: Icons.people,
-                        playerName: 'J2',
-                      )
-                    ],
-                  ),
+                    ),
+                    Player2(
+                      score: score2,
+                      icon: Icons.person_rounded,
+                      playerName: 'J2',
+                    )
+                  ],
                 ),
-                Container(
-                  child: GridView.count(
-                      padding: EdgeInsets.all(30),
-                      primary: false,
-                      shrinkWrap: true,
-                      crossAxisCount: 7,
-                      children: <Widget>[
-                        for (int i = 6; i >= 0; i--)
-                          Row(
-                            children: [
-                              buildCell(i, Colors.grey[300]!),
-                              SizedBox(
-                                height: 10,
-                                width: 10,
-                              ),
-                            ],
+              ),
+              Container(
+                child: GridView.count(
+                  padding: EdgeInsets.all(10),
+                  primary: false,
+                  shrinkWrap: true,
+                  crossAxisCount: 7,
+                  children: <Widget>[
+                    for (int i = 6; i >= 0; i--)
+                      Row(
+                        children: [
+                          buildCell(i, Colors.white),
+                          SizedBox(
+                            height: 10,
+                            width: 6,
                           ),
-                        for (int i = 7; i <= 13; i++)
-                          Row(
-                            children: [
-                              buildCell(i, Colors.grey[300]!),
-                              SizedBox(
-                                height: 10,
-                                width: 10,
-                              ),
-                            ],
+                        ],
+                      ),
+                    for (int i = 7; i <= 13; i++)
+                      Row(
+                        children: [
+                          buildCell(i, Colors.blue),
+                          SizedBox(
+                            height: 10,
+                            width: 6,
                           ),
-                      ]),
+                        ],
+                      ),
+                  ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

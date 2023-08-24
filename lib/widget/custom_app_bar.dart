@@ -16,14 +16,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           bottom: Radius.circular(30),
         ),
         gradient: LinearGradient(
-          colors: [Color(0xFF536DFE), Color(0xFF7C4DFF)],
+          colors: [
+            Color.fromARGB(255, 162, 210, 218),
+            Color.fromARGB(255, 162, 210, 218)
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
+          tileMode: TileMode.repeated,
         ),
       ),
       child: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromARGB(255, 162, 210, 218),
         toolbarHeight: kToolbarHeight + 30,
         shape: CustomShapeBorder(),
         actions: [
@@ -48,17 +52,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             Text(
                               username ?? '',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
+                                color: Colors.black,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 2),
                             Text(
                               'Online',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: 18,
                               ),
                             ),
                           ],
@@ -84,7 +88,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   icon: Icon(
                                     Icons.person,
                                     size: 25,
-                                    color: Colors.white, 
+                                    color: Colors.black,
                                   ),
                                   onPressed: () {},
                                 ),
@@ -98,7 +102,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 );
               } else if (snapshot.hasError) {
                 return Text('Error');
-                
               }
               return SizedBox.shrink();
             },
@@ -110,7 +113,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+              color: Colors.black,
             )),
       ),
     );

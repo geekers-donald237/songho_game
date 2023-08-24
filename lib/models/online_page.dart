@@ -30,7 +30,7 @@ class _OnlinePageState extends State<OnlinePage> {
     Size mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 218, 217, 217),
+      backgroundColor: Color.fromARGB(255, 119, 95, 86),
       appBar: CustomAppBar(),
       body: Container(
         padding: EdgeInsets.all(16),
@@ -41,7 +41,7 @@ class _OnlinePageState extends State<OnlinePage> {
               Text(
                 'Initier une partie',
                 style: TextStyle(
-                  color: buttonColor,
+                  color: Color.fromARGB(255, 162, 210, 218),
                   fontWeight: FontWeight.w900,
                   fontSize: 30,
                 ),
@@ -75,9 +75,11 @@ class _OnlinePageState extends State<OnlinePage> {
                   }); */
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: buttonColor,
+                  backgroundColor: Color.fromARGB(255, 218, 203, 162),
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(color: Colors.white30),
                   ),
                   minimumSize: Size(
                     mediaQuery.width * 0.98,
@@ -90,6 +92,7 @@ class _OnlinePageState extends State<OnlinePage> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -101,9 +104,9 @@ class _OnlinePageState extends State<OnlinePage> {
                     child: Text(
                       'Code de la partie : $hashCode',
                       style: TextStyle(
-                        backgroundColor: Colors.amber,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -138,7 +141,7 @@ class _OnlinePageState extends State<OnlinePage> {
               Text(
                 'Rejoindre une partie',
                 style: TextStyle(
-                  color: buttonColor,
+                  color: Color.fromARGB(255, 162, 210, 218),
                   fontWeight: FontWeight.w900,
                   fontSize: 30,
                 ),
@@ -173,12 +176,16 @@ class _OnlinePageState extends State<OnlinePage> {
                       // Écoute les changements dans le TextField
                       decoration: InputDecoration(
                         labelText: 'Saisissez votre code ici',
-                        prefixIcon: Icon(Icons.password),
-                        labelStyle: const TextStyle(fontSize: 20),
-                        border:
-                            InputBorder.none, // Supprime la bordure inférieure
-                        focusedBorder: InputBorder
-                            .none, // Supprime la bordure inférieure pendant le focus
+                        prefixIcon: Icon(
+                          Icons.password,
+                          color: Colors.white,
+                        ),
+                        labelStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white, // Ajoutez cette ligne
+                        ),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
                       ),
                     ),
                   ),
@@ -222,7 +229,7 @@ class _OnlinePageState extends State<OnlinePage> {
                 ],
               ),
               SizedBox(height: 25),
-              FloatingActionButton(
+              /* FloatingActionButton(
                 onPressed: () async {
                   //print(usernameP2);
 
@@ -231,7 +238,7 @@ class _OnlinePageState extends State<OnlinePage> {
                   // Ajoutez votre logique ici
                 },
                 child: Icon(Icons.start_sharp),
-              ),
+              ), */
               buildUserInfoCard(usernameP2),
               SizedBox(
                 height: 40,
@@ -341,14 +348,14 @@ Card buildUserInfoCard(String useName) {
       title: Text(
         ': $useName',
         style: TextStyle(
-          fontSize: 30,
+          fontSize: 20,
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
       ),
       leading: Icon(
         Icons.person_add_alt_1_rounded,
-        size: 35,
+        size: 25,
         color: Colors.black,
       ),
     ),

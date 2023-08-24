@@ -38,7 +38,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 Text(
                   'Songho Game',
                   style: TextStyle(
-                      color: buttonColor,
+                      color: Colors.black,
                       fontWeight: FontWeight.w900,
                       fontSize: 50),
                 ),
@@ -76,7 +76,11 @@ class _LogInScreenState extends State<LogInScreen> {
                   width: mediaQuery.width * 0.98,
                   height: mediaQuery.height * 0.08,
                   decoration: BoxDecoration(
-                      color: buttonColor,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2.0,
+                      ),
+                      color: Color.fromARGB(255, 218, 203, 162),
                       borderRadius: BorderRadius.circular(10)),
                   child: InkWell(
                     onTap: () async {
@@ -136,13 +140,13 @@ class _LogInScreenState extends State<LogInScreen> {
         ),
         prefixIcon: Icon(
           Icons.password,
-          color: Colors.blueAccent,
+          color: Color.fromARGB(255, 218, 203, 162),
         ),
         labelText: 'Password',
         suffixIcon: IconButton(
           icon: Icon(
             _passwordVisible ? Icons.visibility_off : Icons.visibility,
-            color: Colors.blueAccent,
+            color: Color.fromARGB(255, 218, 203, 162),
           ),
           onPressed: () {
             setState(() {
