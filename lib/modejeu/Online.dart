@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/models/online_page.dart';
@@ -41,12 +42,21 @@ class _OnlineState extends State<Online> {
   int cpt1 = 0, cpt2 = 0;
   bool _jeuEstEnCours = false;
   final gameController = GameController();
+  final int numOfStones = 4; // Nombre de pierres dans chaque trou
+  final double stoneSize = 20.0; // Taille des pierres
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 119, 95, 86),
       appBar: AppBar(
+        title: Text(
+          "Online",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -111,35 +121,33 @@ class _OnlineState extends State<Online> {
               ),
               Container(
                 child: GridView.count(
-                    padding: EdgeInsets.all(30),
-                    primary: false,
-                    shrinkWrap: true,
-                    crossAxisCount: 7,
-                    children: <Widget>[
-                      for (int i = 6; i >= 0; i--)
-                        Row(
-                          children: [
-                            buildCell(i, Colors.amber!),
-                            SizedBox(
-                              height: 10,
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                      for (int i = 7; i <= 13; i++)
-                        Row(
-                          children: [
-                            buildCell(i, Colors.grey[300]!),
-                            SizedBox(
-                              height: 10,
-                              width: 10,
-                            ),
-                          ],
-                        ),
-                    ]),
-              ),
-              SizedBox(
-                height: 20,
+                  padding: EdgeInsets.all(30),
+                  primary: false,
+                  shrinkWrap: true,
+                  crossAxisCount: 7,
+                  children: <Widget>[
+                    for (int i = 6; i >= 0; i--)
+                      Row(
+                        children: [
+                          buildCell(i, Colors.amber!),
+                          SizedBox(
+                            height: 10,
+                            width: 10,
+                          ),
+                        ],
+                      ),
+                    for (int i = 7; i <= 13; i++)
+                      Row(
+                        children: [
+                          buildCell(i, Colors.grey[300]!),
+                          SizedBox(
+                            height: 10,
+                            width: 10,
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -149,6 +157,79 @@ class _OnlineState extends State<Online> {
   }
 
   void _onTapCell(int index) {
+    if ((index == 0 || index == 7) && (_board[index] == 1)) {
+      gameController.showSnackBar(context, "Impossible de jouer cette case");
+    } else if ((index == 0 || index == 7) && (_board[index] == 2)) {
+      if (((_board[(index + 1)] < 4) && (_board[(index + 1)] >= 2)) &&
+          ((_board[(index + 2)] < 4) && (_board[(index + 2)] >= 2))) {
+        _distributePawns(index);
+        _updateCellOnFirestore(index, data);
+      } else {
+        gameController.showSnackBar(context, "Impossible de jouer cette case");
+      }
+    } else {
+      setState(() {
+        if (_jeuEstEnCours == false) {
+          if (statuts == u) {
+            if (index >= 0 && index <= 6) {
+              statut_joueur = 0;
+              gameController.showSnackBar(
+                  context, "Cette case ne vous appartient pas.");
+            } else {
+              if (_board[index] != 0) {
+                _distributePawns(index);
+                _updateCellOnFirestore(index, data);
+                setState(() {
+                  backgroundColor;
+                  message = "Patientez J2.....";
+                  statuts = "J2";
+                });
+              } else {
+                gameController.showSnackBar(
+                    context, "Sélectionnez une case contenant des pions");
+              }
+            }
+          } else {
+            statut_joueur = 0;
+            if (index >= 7 && index <= 13) {
+              gameController.showSnackBar(
+                  context, "Cette case ne vous appartient pas.");
+            } else {
+              if (_board[index] != 0) {
+                _distributePawns(index);
+                _updateCellOnFirestore(index, data);
+                setState(() {
+                  message = "Patientez $u...";
+                  statuts = u;
+                });
+              } else {
+                gameController.showSnackBar(
+                    context, "Sélectionnez une case contenant des pions");
+              }
+            }
+          }
+        } else {
+          gameController.showSnackBar(
+            context,
+            "Veuillez patienter....",
+          );
+        }
+      });
+    }
+  }
+
+  List<int> data = List<int>.filled(14, 5);
+
+  void _updateCellOnFirestore(int index, List<int> data) {
+    FirebaseFirestore.instance
+        .collection('players')
+        .doc(user.uid)
+        .collection('onlinepart')
+        .doc(user.uid)
+        .set({'tableData': data}, SetOptions(merge: true));
+  }
+
+  /* void _onTapCell(int index) {
     if ((index == 0 || index == 7) && (_board[index] == 1)) {
       gameController.showSnackBar(context, "Impossible de jouer cette case");
     } else if ((index == 0 || index == 7) && (_board[index] == 2)) {
@@ -204,7 +285,7 @@ class _OnlineState extends State<Online> {
         }
       });
     }
-  }
+  } */
 
   Future<void> _distributePawns(int index) async {
     int pawns = _board[index];
@@ -323,44 +404,66 @@ class _OnlineState extends State<Online> {
       if (score1 > 35 && score2 <= 35) {
         messageSuccess = "Victoire $u";
         gameController.WinnerSms(messageSuccess, context);
+        _resetScores();
       }
       if (score1 <= 35 && score2 > 35) {
         messageSuccess = "Victoire J2";
         gameController.WinnerSms(messageSuccess, context);
+        _resetScores();
       }
     });
 
     //Vicoire en fonction du nombre de pierres de son cote
-    setState(() {
-      for (int i = 6; i >= 0; i--) {
-        if (_board[i] != 0) {
-          cpt1 = cpt1 + _board[i];
+    setState(
+      () {
+        for (int i = 6; i >= 0; i--) {
+          if (_board[i] != 0) {
+            cpt1 = cpt1 + _board[i];
+          }
         }
-      }
 
-      for (int i = 7; i <= 13; i++) {
-        if (_board[i] != 0) {
-          cpt2 = cpt2 + _board[i];
+        for (int i = 7; i <= 13; i++) {
+          if (_board[i] != 0) {
+            cpt2 = cpt2 + _board[i];
+          }
         }
-      }
-      if (score1 < 35 && score2 < 35 && (cpt1 + cpt2) < 10) {
-        if ((score1 + cpt1) > 35) {
-          messageSuccess = "Victoire $u";
-          gameController.WinnerSms(messageSuccess, context);
-        } else if ((score2 + cpt2) > 35) {
+        if (score1 < 35 && score2 < 35 && (cpt1 + cpt2) < 10) {
+          if ((score1 + cpt1) > 35) {
+            messageSuccess = "Victoire $u";
+            gameController.WinnerSms(messageSuccess, context);
+            _resetScores();
+          } else if ((score2 + cpt2) > 35) {
+            messageSuccess = "Victoire J2";
+            gameController.WinnerSms(messageSuccess, context);
+            _resetScores();
+          }
+        }
+
+        if (cpt1 == 0 && cpt2 != 0) {
           messageSuccess = "Victoire J2";
           gameController.WinnerSms(messageSuccess, context);
+          _resetScores();
         }
-      }
+        if (cpt1 != 0 && cpt2 == 0) {
+          messageSuccess = "Victoire $u";
+          gameController.WinnerSms(messageSuccess, context);
+          _resetScores();
+        }
+      },
+    );
+    _updateFirestoreData();
+  }
 
-      if (cpt1 == 0 && cpt2 != 0) {
-        messageSuccess = "Victoire J2";
-        gameController.WinnerSms(messageSuccess, context);
-      }
-      if (cpt1 != 0 && cpt2 == 0) {
-        messageSuccess = "Victoire $u";
-        gameController.WinnerSms(messageSuccess, context);
-      }
+// Sauvegarder les scores sur firebase
+  void _updateFirestoreData() {
+    FirebaseFirestore.instance
+        .collection('players')
+        .doc(user.uid)
+        .collection('onlinepart')
+        .doc(user.uid)
+        .update({
+      'score1': score1,
+      'score2': score2,
     });
   }
 
@@ -444,5 +547,18 @@ class _OnlineState extends State<Online> {
         print("Erreur : $error");
       }
     }
+  }
+
+// remet les scores à zero lorsque la partie de jeu est terminée
+  void _resetScores() {
+    FirebaseFirestore.instance
+        .collection('players')
+        .doc(user.uid)
+        .collection('onlinepart')
+        .doc(user.uid)
+        .update({
+      'score1': 0,
+      'score2': 0,
+    });
   }
 }

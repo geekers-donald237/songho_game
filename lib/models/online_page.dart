@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:songhogame/controller/gameController.dart';
 import 'package:songhogame/modejeu/Online.dart';
+import 'package:songhogame/models/dataOnline.dart';
 import 'package:songhogame/onboarding/hashcode.dart';
 import 'package:songhogame/views/menuJeu.dart';
 import 'package:songhogame/widget/custom_app_bar.dart';
@@ -61,6 +62,8 @@ class _OnlinePageState extends State<OnlinePage> {
                     isEditable = false;
                     joinEnabled = false;
                     hashCode = generateHashCode();
+                    saveHashCode(hashCode, user.uid);
+                    createAndSaveFirebaseTable(user.uid);
                   });
                   isButtonDisabled ? null : () {};
                   ElevatedButton.styleFrom(

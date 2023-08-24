@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:songhogame/controller/auth_controller.dart';
+import 'package:songhogame/onboarding/Regle.dart';
 import 'package:songhogame/views/Start.dart';
 import 'customListtitle.dart';
 
@@ -83,6 +84,18 @@ class CustomDrawer extends StatelessWidget {
             child: ListTile(
               leading: Icon(Icons.info_outline),
               title: Text('À propos de notre jeu de Songho'),
+              onTap: () {
+                Future.delayed(Duration(seconds: 1), () {
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                    DeviceOrientation.portraitDown,
+                  ]);
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Regle()),
+                    (route) => false,
+                  );
+                });
+              },
             ),
           ),
         ],
