@@ -214,19 +214,20 @@ class _OnlinePageState extends State<OnlinePage> {
                     child: Align(
                       alignment: Alignment.center,
                       child: IconButton(
-                        onPressed: () {
-                          EasyLoading.show(status: 'Recherche...');
+                        onPressed: () async {
+                          print(u);
+                          onPressedButton(); // Appel de la fonction de recherche
+                          username = await getUsernameFromFirebase(user.uid);
+                          setState(() {
+                            usernameP2 = username[1];
+                          });
+                          /* EasyLoading.show(status: 'Recherche...'); 
                           joinEnabled
                               ? () async {
-                                  onPressedButton(); // Appel de la fonction de recherche
-                                  username =
-                                      await getUsernameFromFirebase(user.uid);
-                                  setState(() {
-                                    usernameP2 = username[1];
-                                  });
+                                  
                                 }
                               : null;
-                          EasyLoading.dismiss();
+                          EasyLoading.dismiss();*/
                         },
                         icon: Icon(
                           Icons.check_box,
@@ -245,7 +246,9 @@ class _OnlinePageState extends State<OnlinePage> {
                 height: 40,
               ),
               FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  gameController.changeScreenOrientation(context, Online());
+                },
                 child: Icon(Icons.play_arrow),
                 backgroundColor: Colors.white,
               ),
