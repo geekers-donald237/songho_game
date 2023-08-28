@@ -18,6 +18,8 @@ class OnlinePage extends StatefulWidget {
 }
 
 String hashCode = '';
+String userIdP1 = '';
+String userIdP2 = '';
 String usernameP1 = '';
 String usernameP2 = '';
 var user = FirebaseAuth.instance.currentUser!;
@@ -182,7 +184,8 @@ class _OnlinePageState extends State<OnlinePage> {
                                     4), // Position du curseur à la fin du texte
                           );
                         }
-                        getValueFromTextField; // Appeler la fonction pour obtenir la valeur du champ de texte
+                        getValueFromTextField(
+                            value); // Appeler la fonction pour obtenir la valeur du champ de texte
                       },
                       // Écoute les changements dans le TextField
                       decoration: InputDecoration(
@@ -215,19 +218,7 @@ class _OnlinePageState extends State<OnlinePage> {
                       alignment: Alignment.center,
                       child: IconButton(
                         onPressed: () async {
-                          print(u);
                           onPressedButton(); // Appel de la fonction de recherche
-                          username = await getUsernameFromFirebase(user.uid);
-                          setState(() {
-                            usernameP2 = username[1];
-                          });
-                          /* EasyLoading.show(status: 'Recherche...'); 
-                          joinEnabled
-                              ? () async {
-                                  
-                                }
-                              : null;
-                          EasyLoading.dismiss();*/
                         },
                         icon: Icon(
                           Icons.check_box,
@@ -247,7 +238,7 @@ class _OnlinePageState extends State<OnlinePage> {
               ),
               FloatingActionButton(
                 onPressed: () {
-                  gameController.changeScreenOrientation(context, Online());
+                  findPlayersAndExecute();
                 },
                 child: Icon(Icons.play_arrow),
                 backgroundColor: Colors.white,
@@ -296,27 +287,26 @@ class _OnlinePageState extends State<OnlinePage> {
   // Fonction pour récupérer la valeur saisie dans le TextField
   String getValueFromTextField(String value) {
     inputValue = value;
-    //print(inputValue);
+    // print(inputValue);
 
     return inputValue;
   }
 
   void onPressedButton() async {
-    EasyLoading.show(status: 'Recherche...');
     final inputHashCode = getValueFromTextField(
-        inputValue); // Récupère la valeur saisie dans le TextField
+        inputValue); // Récupère la valeur saisie dans le TextFiel
     final result = await saveUidIfHashCodeExists(
         inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
-
-    if (result != null) {
-      // print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
-      EasyLoading.showSuccess('Reussie');
+    //EasyLoading.showSuccess('Reussie');
+/*     if (result != null) {
+      //print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
+      //EasyLoading.showSuccess('Reussie');
       // Effectuez ici les actions à réaliser lorsque le hashCode existe et que l'UID a été enregistré
     } else {
       // print('Le hashCode n\'existe pas dans Firebase.');
-      EasyLoading.showError('Code absent');
+      // EasyLoading.showError('Code absent');
       EasyLoading.dismiss();
-    }
+    } */
   }
 
 // CARD FOR PLAYERS INFOS
@@ -422,5 +412,64 @@ class _OnlinePageState extends State<OnlinePage> {
       // Retourner une liste vide si l'utilisateur n'existe pas
       return usernames;
     }
+  }
+
+  void findPlayersAndExecute() {
+    FirebaseFirestore.instance
+        .collection("players")
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (DocumentSnapshot doc in querySnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        if (data.containsKey("uid")) {
+          userIdP1 = data["uid"];
+        }
+        if (data.containsKey("hashCode")) {
+          hashCode = data["hashCode"];
+        }
+        if (data.containsKey("userIdP2")) {
+          userIdP2 = data["userIdP2"];
+        }
+
+        if (userIdP1 != null && hashCode != null && userIdP2 != null) {
+          gameController.changeScreenOrientation(context, Online());
+          return;
+        } else {
+          EasyLoading.showInfo('Configuration incorrecte !');
+        }
+      }
+    });
+  }
+
+  Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('players')
+        .where('hashCode', isEqualTo: hashCode)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          snapshot.docs.first;
+      final String documentId = documentSnapshot.id;
+
+      await FirebaseFirestore.instance
+          .collection('players')
+          .doc(documentId)
+          .set({
+        'userIdP2': uid,
+      }, SetOptions(merge: true)); // Ajoute l'uid au document existant
+      username = await getUsernameFromFirebase(user.uid);
+      setState(() {
+        usernameP2 = username[1];
+      });
+      EasyLoading.showInfo('Code trouvé');
+    } else {
+      // Le hashCode n'existe pas dans la base de données
+      EasyLoading.showInfo('Le Code $hashCode n\'existe pas');
+    }
+
+    return uid;
   }
 }

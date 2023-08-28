@@ -49,7 +49,6 @@ Future<void> saveHashCode(String uid, String hashCode) async {
     await firestore.collection('players').doc(hashCode).set(
       {
         'hashCode': uid,
-        'userIdP1': hashCode,
       },
       SetOptions(merge: true), // Option pour fusionner les données
     );
@@ -75,26 +74,6 @@ Future<User> getCurrentUser() async {
   return user;
 }
 
-Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
-  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-      .instance
-      .collection('players')
-      .where('hashCode', isEqualTo: hashCode)
-      .limit(1)
-      .get();
 
-  if (snapshot.docs.isNotEmpty) {
-    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-        snapshot.docs.first;
-    final String documentId = documentSnapshot.id;
 
-    await FirebaseFirestore.instance.collection('players').doc(documentId).set(
-        {'userIdP2': uid},
-        SetOptions(merge: true)); // Ajoute l'uid au document existant
-  } else {
-    // Le hashCode n'existe pas dans la base de données
-    EasyLoading.showInfo('Le hashCode $hashCode n\'existe pas');
-  }
 
-  return uid;
-}
