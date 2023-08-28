@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 // Générer le hashCode de la partie
 String generateHashCode() {
@@ -54,7 +55,7 @@ Future<void> saveHashCode(String uid, String hashCode) async {
     );
     //print('Code sauvegardé avec succès');
   } catch (e) {
-    print('Erreur lors de la sauvegarde du Code : $e');
+    print('$e');
   }
 }
 
@@ -90,6 +91,9 @@ Future<String> saveUidIfHashCodeExists(String hashCode, String uid) async {
     await FirebaseFirestore.instance.collection('players').doc(documentId).set(
         {'userIdP2': uid},
         SetOptions(merge: true)); // Ajoute l'uid au document existant
+  } else {
+    // Le hashCode n'existe pas dans la base de données
+    EasyLoading.showInfo('Le hashCode $hashCode n\'existe pas');
   }
 
   return uid;

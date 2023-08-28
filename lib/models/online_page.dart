@@ -214,16 +214,20 @@ class _OnlinePageState extends State<OnlinePage> {
                     child: Align(
                       alignment: Alignment.center,
                       child: IconButton(
-                        onPressed: joinEnabled
-                            ? () async {
-                                onPressedButton(); // Appel de la fonction de recherche
-                                username =
-                                    await getUsernameFromFirebase(user.uid);
-                                setState(() {
-                                  usernameP2 = username[1];
-                                });
-                              }
-                            : null,
+                        onPressed: () {
+                          EasyLoading.show(status: 'Recherche...');
+                          joinEnabled
+                              ? () async {
+                                  onPressedButton(); // Appel de la fonction de recherche
+                                  username =
+                                      await getUsernameFromFirebase(user.uid);
+                                  setState(() {
+                                    usernameP2 = username[1];
+                                  });
+                                }
+                              : null;
+                          EasyLoading.dismiss();
+                        },
                         icon: Icon(
                           Icons.check_box,
                           color: Colors.white,
@@ -234,16 +238,14 @@ class _OnlinePageState extends State<OnlinePage> {
                   )
                 ],
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 20),
               // Informations du joueur 2
-              buildUserInfoCard(usernameP2),
+              buildUserInfoRow(usernameP2),
               SizedBox(
                 height: 40,
               ),
               FloatingActionButton(
-                onPressed: () {
-                  gameController.changeScreenOrientation(context, Online());
-                },
+                onPressed: () {},
                 child: Icon(Icons.play_arrow),
                 backgroundColor: Colors.white,
               ),
@@ -315,24 +317,71 @@ class _OnlinePageState extends State<OnlinePage> {
   }
 
 // CARD FOR PLAYERS INFOS
-  Card buildUserInfoCard(String useName) {
-    return Card(
-      child: ListTile(
-        title: Text(
-          ': $useName',
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+  Row buildUserInfoRow(String useName) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 65,
+        ),
+        Expanded(
+          child: Card(
+            color: Color.fromARGB(255, 102, 102, 102),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        useName.isNotEmpty ? useName : '',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AnimatedOpacity(
+                              opacity: useName.isNotEmpty ? 0.0 : 0.6,
+                              duration: Duration(milliseconds: 200),
+                              child: Icon(
+                                Icons.add,
+                                size: 35,
+                                color: Colors.white,
+                              ),
+                            ),
+                            AnimatedOpacity(
+                              opacity: useName.isNotEmpty ? 0.0 : 0.6,
+                              duration: Duration(milliseconds: 200),
+                              child: Text(
+                                'Nouveau joueur',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-        leading: Icon(
-          Icons.person_add_alt_1_rounded,
-          size: 25,
-          color: Colors.black,
+        SizedBox(
+          width: 65,
         ),
-      ),
-      color: Colors.white,
+      ],
     );
   }
 

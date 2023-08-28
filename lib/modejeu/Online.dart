@@ -119,6 +119,30 @@ class _OnlineState extends State<Online> {
                   ],
                 ),
               ),
+              /* Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: ShaderMask(
+                    blendMode: BlendMode.srcATop,
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 218, 203, 162), // Couleur 1
+                          Color.fromARGB(255, 119, 95, 86), // Couleur 2
+                        ],
+                      ).createShader(bounds);
+                    },
+                    child: Text(
+                      "SONGHO GAME",
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                  ),
+                ),
+              ), */
               Container(
                 child: GridView.count(
                   padding: EdgeInsets.all(30),
@@ -129,7 +153,7 @@ class _OnlineState extends State<Online> {
                     for (int i = 6; i >= 0; i--)
                       Row(
                         children: [
-                          buildCell(i, Colors.amber!),
+                          buildCell(i, Colors.grey[300]!),
                           SizedBox(
                             height: 10,
                             width: 10,
