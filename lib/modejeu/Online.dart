@@ -163,70 +163,85 @@ class _OnlineState extends State<Online> {
       if (((_board[(index + 1)] < 4) && (_board[(index + 1)] >= 2)) &&
           ((_board[(index + 2)] < 4) && (_board[(index + 2)] >= 2))) {
         _distributePawns(index);
-        _updateCellOnFirestore(index, data);
       } else {
         gameController.showSnackBar(context, "Impossible de jouer cette case");
       }
     } else {
-      setState(() {
-        if (_jeuEstEnCours == false) {
-          if (statuts == u) {
-            if (index >= 0 && index <= 6) {
+      setState(
+        () {
+          if (_jeuEstEnCours == false) {
+            if (statuts == u) {
+              if (index >= 0 && index <= 6) {
+                statut_joueur = 0;
+                gameController.showSnackBar(
+                    context, "Cette case ne vous appartient pas.");
+              } else {
+                if (_board[index] != 0) {
+                  _updateDataOnFirestore();
+                  _distributePawns(index);
+                  setState(() {
+                    backgroundColor;
+                    message = "Patientez J2.....";
+                    statuts = "J2";
+                  });
+                } else {
+                  gameController.showSnackBar(
+                      context, "Sélectionnez une case contenant des pions");
+                }
+              }
+            } else {
               statut_joueur = 0;
-              gameController.showSnackBar(
-                  context, "Cette case ne vous appartient pas.");
-            } else {
-              if (_board[index] != 0) {
-                _distributePawns(index);
-                _updateCellOnFirestore(index, data);
-                setState(() {
-                  backgroundColor;
-                  message = "Patientez J2.....";
-                  statuts = "J2";
-                });
-              } else {
+              if (index >= 7 && index <= 13) {
                 gameController.showSnackBar(
-                    context, "Sélectionnez une case contenant des pions");
+                    context, "Cette case ne vous appartient pas.");
+              } else {
+                if (_board[index] != 0) {
+                  _updateDataOnFirestore();
+                  _distributePawns(index);
+                  setState(() {
+                    message = "Patientez $u...";
+                    statuts = u;
+                  });
+                } else {
+                  gameController.showSnackBar(
+                      context, "Sélectionnez une case contenant des pions");
+                }
               }
             }
+            _updateCellOnFirestore(data);
           } else {
-            statut_joueur = 0;
-            if (index >= 7 && index <= 13) {
-              gameController.showSnackBar(
-                  context, "Cette case ne vous appartient pas.");
-            } else {
-              if (_board[index] != 0) {
-                _distributePawns(index);
-                _updateCellOnFirestore(index, data);
-                setState(() {
-                  message = "Patientez $u...";
-                  statuts = u;
-                });
-              } else {
-                gameController.showSnackBar(
-                    context, "Sélectionnez une case contenant des pions");
-              }
-            }
+            gameController.showSnackBar(
+              context,
+              "Veuillez patienter....",
+            );
           }
-        } else {
-          gameController.showSnackBar(
-            context,
-            "Veuillez patienter....",
-          );
-        }
-      });
+        },
+      );
     }
   }
 
   List<int> data = List<int>.filled(14, 5);
 
-  void _updateCellOnFirestore(int index, List<int> data) {
+  void _updateCellOnFirestore(List<int> data) {
     FirebaseFirestore.instance
         .collection('players')
         .doc(user.uid)
         .collection('onlinepart')
         .doc(user.uid)
         .set({'tableData': data}, SetOptions(merge: true));
+  }
+
+  void _updateDataOnFirestore() {
+    FirebaseFirestore.instance
+        .collection('players')
+        .doc(user.uid)
+        .collection('onlinepart')
+        .doc(user.uid)
+        .update({
+      'message': message,
+      'statuts': statuts,
+      'statut_joueur': statut_joueur,
+    });
   }
 
   /* void _onTapCell(int index) {
@@ -348,9 +363,12 @@ class _OnlineState extends State<Online> {
 
       setState(() {
         if (statuts == u) {
+          _updateDataOnFirestore();
           message = "$u à vous de Jouer";
+          _updateDataOnFirestore();
         } else {
-          message = "J2 vous de Jouer";
+          message = "J2 à vous de Jouer";
+          _updateDataOnFirestore();
         }
       });
 
@@ -394,8 +412,10 @@ class _OnlineState extends State<Online> {
     setState(() {
       if (statuts == u) {
         message = "$u à vous de Jouer";
+        _updateDataOnFirestore();
       } else {
         message = "J2 vous de Jouer";
+        _updateDataOnFirestore();
       }
     });
 
