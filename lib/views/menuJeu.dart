@@ -5,6 +5,7 @@ import 'package:songhogame/modejeu/OnePlayers.dart';
 import 'package:songhogame/modejeu/TwoPlayers.dart';
 import 'package:songhogame/views/Start.dart';
 import 'package:songhogame/controller/internet.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:songhogame/controller/gameController.dart';
 
 class MenuJeu extends StatefulWidget {
@@ -202,10 +203,20 @@ class _MenuJeuState extends State<MenuJeu> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(top: 16.0),
+              padding: EdgeInsets.only(top: 60.0),
               child: FloatingActionButton(
-                onPressed: () {},
-                child: Icon(Icons.rule_sharp, color: Colors.white,),
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                onPressed: () async {
+                  if (await canLaunch('https://www.youtube.com')) {
+                    await launch('https://www.youtube.com');
+                  } else {
+                    throw 'Couldn\'t launch ';
+                  }
+                },
+                child: Icon(
+                  Icons.rule_sharp,
+                ),
               ),
             ),
           ],
@@ -214,3 +225,12 @@ class _MenuJeuState extends State<MenuJeu> {
     );
   }
 }
+
+/* void _launchURL() async {
+  if (await canLaunch('https://www.youtube.com')) {
+    await launch('https://www.youtube.com');
+  } else {
+    throw 'Couldn\'t launch ';
+  }
+}
+ */
