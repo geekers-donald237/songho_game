@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
+import 'Urls.dart';
+
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -53,7 +55,7 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyDtaTF2t5waaiK5SBP_xWqu2mkt6_OvXns',
     appId: '1:50221031304:android:b6255a98cc415e8310643d',
     messagingSenderId: '50221031304',
-    projectId: 'songho-311fc',
+    projectId: Urls.firebase_project_id,
     storageBucket: 'songho-311fc.appspot.com',
   );
 
@@ -61,7 +63,7 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyAJi0e3z79NrsMeugA9FTc48GFeyMM7Oac',
     appId: '1:50221031304:ios:776f273faded664410643d',
     messagingSenderId: '50221031304',
-    projectId: 'songho-311fc',
+    projectId: Urls.firebase_project_id,
     storageBucket: 'songho-311fc.appspot.com',
     iosClientId: '50221031304-0om2m0e581g07vtf7k08rdl3lautbgh0.apps.googleusercontent.com',
     iosBundleId: 'com.example.songhogame',

@@ -8,6 +8,8 @@ import 'package:songhogame/onboarding/Regle.dart';
 import 'package:songhogame/views/login_screen.dart';
 import 'package:songhogame/views/menuJeu.dart';
 
+import '../Urls.dart';
+
 class Start extends StatefulWidget {
   @override
   _StartState createState() => _StartState();
@@ -52,23 +54,25 @@ class _StartState extends State<Start> {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 90),
-                    Text(
-                      'SONGHO',
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white60,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(1, 2),
-                            blurRadius: 4,
-                          ),
-                        ],
+                    SizedBox(height: 40),
+                    Center(
+                      child: Text(
+                        'SONGHO GAME',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white60,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              offset: Offset(1, 2),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 8),
                     Text(
                       'Venez découvrir le jeu Songho, originaire du Centre Cameroun',
                       style: TextStyle(
@@ -85,14 +89,14 @@ class _StartState extends State<Start> {
                           child: ClipRRect(
                             child: Image.asset(
                               'assets/images/songho_board.png',
-                              width: 200,
-                              height: 200,
+                              width: 150,
+                              height: 150,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 20),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
@@ -181,7 +185,7 @@ class _StartState extends State<Start> {
                     if (adVisible)
                       Container(
                         child: AdmobBanner(
-                          adUnitId: "ca-app-pub-5829950338127826/9635098933",
+                          adUnitId: Urls.google_ads,
                           adSize: AdmobBannerSize.BANNER,
                         ),
                       ),
