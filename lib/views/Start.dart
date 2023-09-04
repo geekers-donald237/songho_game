@@ -2,8 +2,9 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
+import 'package:songhogame/onboarding/Regle.dart';
 import 'package:songhogame/views/login_screen.dart';
 import 'package:songhogame/views/menuJeu.dart';
 
@@ -14,6 +15,7 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   bool adVisible = false;
+  bool isMuted = false;
 
   @override
   void initState() {
@@ -30,6 +32,13 @@ class _StartState extends State<Start> {
     });
   }
 
+  void toggleSound() {
+    // Mettez ici votre logique pour activer/désactiver le son
+    setState(() {
+      isMuted = !isMuted;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,7 +52,7 @@ class _StartState extends State<Start> {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 120),
+                    SizedBox(height: 90),
                     Text(
                       'SONGHO',
                       style: TextStyle(
@@ -172,7 +181,7 @@ class _StartState extends State<Start> {
                     if (adVisible)
                       Container(
                         child: AdmobBanner(
-                          adUnitId: "ca-app-pub-3940256099942544/6300978111",
+                          adUnitId: "ca-app-pub-5829950338127826/9635098933",
                           adSize: AdmobBannerSize.BANNER,
                         ),
                       ),
@@ -182,22 +191,45 @@ class _StartState extends State<Start> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.white, // Couleur de fond du bouton
-          mini: true,
-          child: Icon(
-            Icons.settings,
-            color: Colors.black,
-          ), // Icône "paramètres"
+        floatingActionButton: SpeedDial(
+          // Le FAB principal
+          visible: true,
+          closeManually: true,
+          overlayOpacity: 0.5,
+          curve: Curves.bounceIn,
+          activeIcon: Icons.close,
+          overlayColor: Colors.black,
+          icon: Icons.settings_rounded,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 8.0,
+          children: [
+            SpeedDialChild(
+              child: Icon(
+                isMuted ? Icons.volume_up_rounded : Icons.volume_off_rounded,
+                color: Colors.black,
+              ),
+              backgroundColor: Colors.white,
+              onTap: () {
+                toggleSound();
+              },
+            ),
+            SpeedDialChild(
+              child: Icon(
+                Icons.rule_rounded,
+                color: Colors.black,
+              ),
+              backgroundColor: Colors.white,
+              onTap: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => Regle()),
+                  (route) => false,
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  void initialize() async {
-    /// here we will add a wait second to move on next screen
-    await Future.delayed(Duration(seconds: 3));
-    FlutterNativeSplash.remove();
   }
 }

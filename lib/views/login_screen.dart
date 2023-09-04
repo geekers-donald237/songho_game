@@ -84,19 +84,19 @@ class _LogInScreenState extends State<LogInScreen> {
                       borderRadius: BorderRadius.circular(10)),
                   child: InkWell(
                     onTap: () async {
-                      EasyLoading.show(status: '');
+                      EasyLoading.show(status: 'Connexion');
                       await Future.delayed(Duration(seconds: 2));
 
                       LogInScreen.authControllerInstance.login(
                           _emailController.text, _passwordController.text);
 
-                      EasyLoading.dismiss();
+                      EasyLoading.showInfo('Connecté');
                     },
                     child: const Center(
                         child: Text(
                       'Login',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700,),
                     )),
                   ),
                 ),

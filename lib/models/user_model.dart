@@ -26,7 +26,7 @@ class User {
       uid: snapshotData['uid'],
       name: snapshotData['usernameP1'],
       email: snapshotData['email'],
-       profilePhoto: snapshot['profilePhoto'],
+      profilePhoto: snapshot['profilePhoto'],
     );
   }
 }

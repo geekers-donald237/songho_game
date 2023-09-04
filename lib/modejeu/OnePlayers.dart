@@ -29,7 +29,7 @@ class _OnePlayersState extends State<OnePlayers> {
 
   int scorePlayer = 0;
   int scoreComputer = 0;
-  String message = "$u à vous de commencer";
+  String message = "A vous de commencer";
   int gagnant = -1;
   String winner = "";
   String messageSuccess = "";
@@ -176,7 +176,7 @@ class _OnePlayersState extends State<OnePlayers> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     setState(() {
-      message = "Patientez...., L'ordinateur joue";
+      message = "Patientez...., l'ordinateur joue";
     });
     _computerDistributePawns();
   }
@@ -233,7 +233,7 @@ class _OnePlayersState extends State<OnePlayers> {
     }
 
     setState(() {
-      message = "$u à vous de jouer";
+      message = "A vous de jouer";
       _jeuEstEnCours = false;
     });
 
@@ -249,7 +249,7 @@ class _OnePlayersState extends State<OnePlayers> {
 
       if (scoreComputer < 35 && scorePlayer < 35 && (cpt1 + cpt2) < 10) {
         if ((scorePlayer + cpt1) > 35) {
-          messageSuccess = "Vous avez perdu";
+          messageSuccess = "Game over";
           gameController.WinnerSms(messageSuccess, context);
         } else if ((scoreComputer + cpt2) > 35) {
           messageSuccess = "Vous avez gagné";
@@ -311,11 +311,11 @@ class _OnePlayersState extends State<OnePlayers> {
                 context, "Cette case ne vous appartient pas.");
           } else {
             if (_board[index] != 0) {
-              message = "Vous Jouez..... ";
+              message = "Vous Jouez.....";
               _distributePawns(index);
             } else {
               gameController.showSnackBar(
-                  context, "Selectionner une case contenant ds pions");
+                  context, "Selectionner une case contenant des pions");
             }
           }
         } else {

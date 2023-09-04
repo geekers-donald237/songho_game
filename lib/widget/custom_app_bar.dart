@@ -10,7 +10,6 @@ class UserUtils {
 
 String u = '';
 
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CollectionReference playersCollection =
       FirebaseFirestore.instance.collection('players');
@@ -81,7 +80,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                       CircleAvatar(
                         radius: 20,
-                        backgroundColor: Colors.black,
+                        backgroundColor: Colors.white,
                         child: Center(
                           child: downloadURL != null
                               ? ClipOval(
@@ -94,7 +93,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 )
                               : IconButton(
                                   icon: Icon(
-                                    Icons.person,
+                                    Icons.person_rounded,
                                     size: 25,
                                     color: Colors.black,
                                   ),

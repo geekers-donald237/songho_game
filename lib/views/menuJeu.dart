@@ -91,13 +91,19 @@ class _MenuJeuState extends State<MenuJeu> {
                       child: Column(
                         children: [
                           ListTile(
-                            leading: Icon(Icons.person, color: Colors.white),
+                            leading: Icon(
+                              Icons.person_rounded,
+                              color: Colors.white,
+                            ),
                             title: Text(
-                              "Player And Computer",
-                              style: TextStyle(color: Colors.white),
+                              "Joueur vs Ordinateur",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             subtitle: Text(
-                              "lets Go on computer",
+                              "Jouer contre l'ordinateur",
                               style: TextStyle(color: Colors.white),
                             ),
                             onTap: () {
@@ -106,14 +112,17 @@ class _MenuJeuState extends State<MenuJeu> {
                             },
                           ),
                           ListTile(
-                            leading: Icon(Icons.online_prediction,
+                            leading: Icon(Icons.online_prediction_rounded,
                                 color: Colors.white),
                             title: Text(
                               "Online",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             subtitle: Text(
-                              "Play with any friends",
+                              "Jouer à distance",
                               style: TextStyle(color: Colors.white),
                             ),
                             onTap: () async {
@@ -124,14 +133,17 @@ class _MenuJeuState extends State<MenuJeu> {
                             },
                           ),
                           ListTile(
-                            leading: Icon(Icons.group_add_outlined,
+                            leading: Icon(Icons.group_add_rounded,
                                 color: Colors.white),
                             title: Text(
-                              "Two players",
-                              style: TextStyle(color: Colors.white),
+                              "Deux joueurs",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             subtitle: Text(
-                              "Get's Started",
+                              "Jouer contre un ami",
                               style: TextStyle(color: Colors.white),
                             ),
                             onTap: () {

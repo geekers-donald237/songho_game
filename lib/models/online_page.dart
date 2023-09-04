@@ -22,7 +22,9 @@ String userIdP1 = '';
 String userIdP2 = '';
 String usernameP1 = '';
 String usernameP2 = '';
+
 var user = FirebaseAuth.instance.currentUser!;
+
 final gameController = GameController();
 TextEditingController codeController = TextEditingController();
 
@@ -37,8 +39,6 @@ class _OnlinePageState extends State<OnlinePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size mediaQuery = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 119, 95, 86),
       appBar: CustomAppBar(),
@@ -58,57 +58,51 @@ class _OnlinePageState extends State<OnlinePage> {
                 textAlign: TextAlign.left,
               ),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  setState(() {
-                    isEditable = false;
-                    joinEnabled = false;
-                    hashCode = generateHashCode();
-                    saveHashCode(hashCode, user.uid);
-                    createAndSaveFirebaseTable(user.uid);
-                  });
-                  isButtonDisabled ? null : () {};
-                  ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: isButtonDisabled
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : Colors.grey,
-                  );
-
-                  /* setState(() {
-                    hashCode = generateHashCode();
-                  });
-                   saveHashCode(hashCode, user.uid); */
-                  /*createAndSaveFirebaseTable(user.uid);
-                  retrieveFirebaseTable(user.uid);
-                  username = await getUsernameFromFirebase(user.uid);
-                  setState(() {
-                    usernameP1 = username[0];
-                  }); */
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 218, 203, 162),
-                  foregroundColor: Colors.white,
+              Ink(
+                decoration: ShapeDecoration(
+                  color: Color.fromARGB(255, 218, 203, 162),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: Colors.white30),
-                  ),
-                  minimumSize: Size(
-                    mediaQuery.width * 0.98,
-                    mediaQuery.height * 0.08,
+                    side: BorderSide(
+                      color: Colors.white30,
+                    ),
                   ),
                 ),
-                child: Center(
-                  child: Text(
-                    'Lancer',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      isEditable = false;
+                      joinEnabled = false;
+                      hashCode = generateHashCode();
+                      saveHashCode(hashCode, user.uid);
+                      createAndSaveFirebaseTable(user.uid);
+                    });
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Générer le code',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(width: 2),
+                        Icon(
+                          Icons.code_rounded,
+                          color: Colors.black,
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
+
               SizedBox(height: 16),
               Row(
                 children: [
@@ -230,18 +224,64 @@ class _OnlinePageState extends State<OnlinePage> {
                   )
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               // Informations du joueur 2
               buildUserInfoRow(usernameP2),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  findPlayersAndExecute();
-                },
-                child: Icon(Icons.play_arrow),
-                backgroundColor: Colors.white,
+              Text(
+                'Appuyer ici pour lancer la partie',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_down,
+                size: 32,
+                color: Colors.white,
+              ),
+              Ink(
+                decoration: ShapeDecoration(
+                  color: Colors.blueGrey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    //mergeTables(dataSubsetP1, remainingData);
+                    findPlayersAndExecute();
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Play',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(width: 2),
+                        Icon(
+                          Icons.play_arrow_rounded,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -295,8 +335,8 @@ class _OnlinePageState extends State<OnlinePage> {
   void onPressedButton() async {
     final inputHashCode = getValueFromTextField(
         inputValue); // Récupère la valeur saisie dans le TextFiel
-    final result = await saveUidIfHashCodeExists(
-        inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
+    final result = await saveUidIfHashCodeExists(inputHashCode, user.uid); // Vérifie si le hashCode existe dans Firebase
+
     //EasyLoading.showSuccess('Reussie');
 /*     if (result != null) {
       //print('Le hashCode existe dans Firebase et l\'UID a été enregistré.');
@@ -317,57 +357,71 @@ class _OnlinePageState extends State<OnlinePage> {
           width: 65,
         ),
         Expanded(
-          child: Card(
-            color: Color.fromARGB(255, 102, 102, 102),
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        useName.isNotEmpty ? useName : '',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Color.fromARGB(255, 102, 102, 102),
+              border: Border.all(
+                color: Colors.black38,
+                width: 2.0,
+              ),
+            ),
+            child: Card(
+              color: Colors.transparent,
+              elevation: 0,
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          useName.isNotEmpty ? useName : '',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            AnimatedOpacity(
-                              opacity: useName.isNotEmpty ? 0.0 : 0.6,
-                              duration: Duration(milliseconds: 200),
-                              child: Icon(
-                                Icons.add,
-                                size: 35,
-                                color: Colors.white,
-                              ),
-                            ),
-                            AnimatedOpacity(
-                              opacity: useName.isNotEmpty ? 0.0 : 0.6,
-                              duration: Duration(milliseconds: 200),
-                              child: Text(
-                                'Nouveau joueur',
-                                style: TextStyle(
-                                  fontSize: 16,
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AnimatedOpacity(
+                                opacity: useName.isNotEmpty ? 0.0 : 0.6,
+                                duration: Duration(milliseconds: 200),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 35,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          ],
+                              AnimatedOpacity(
+                                opacity: useName.isNotEmpty ? 0.0 : 0.6,
+                                duration: Duration(milliseconds: 200),
+                                child: Text(
+                                  'Nouveau joueur',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -377,6 +431,8 @@ class _OnlinePageState extends State<OnlinePage> {
       ],
     );
   }
+
+  // Fusion des deux tableaux
 
   Future<List<String>> getUsernameFromFirebase(String uid) async {
     // Récupérer la référence de la collection "players" dans Firebase
@@ -415,6 +471,8 @@ class _OnlinePageState extends State<OnlinePage> {
   }
 
   void findPlayersAndExecute() {
+    EasyLoading.show(status: 'Vérification');
+
     FirebaseFirestore.instance
         .collection("players")
         .get()
@@ -430,7 +488,7 @@ class _OnlinePageState extends State<OnlinePage> {
         if (data.containsKey("userIdP2")) {
           userIdP2 = data["userIdP2"];
         }
-
+        EasyLoading.dismiss();
         if (userIdP1 != null && hashCode != null && userIdP2 != null) {
           gameController.changeScreenOrientation(context, Online());
           return;
@@ -459,11 +517,14 @@ class _OnlinePageState extends State<OnlinePage> {
           .doc(documentId)
           .set({
         'userIdP2': uid,
+        //'usernameP2': username,
       }, SetOptions(merge: true)); // Ajoute l'uid au document existant
       username = await getUsernameFromFirebase(user.uid);
       setState(() {
         usernameP2 = username[1];
       });
+      //saveRemainingDataList(user.uid);
+      //mergeTables(dataSubsetP1, remainingData);
       EasyLoading.showInfo('Code trouvé');
     } else {
       // Le hashCode n'existe pas dans la base de données
@@ -472,4 +533,51 @@ class _OnlinePageState extends State<OnlinePage> {
 
     return uid;
   }
+
+// Fonction récupérant les données de la liste tableData
+void recupererDonneesDeTable(String hashCodeJoueur) {
+  // Référence à la collection Players
+  final collectionPlayersRef = FirebaseFirestore.instance.collection('Players');
+
+  // Recherche du joueur en utilisant le hashCode
+  collectionPlayersRef
+      .where('hashCode', isEqualTo: hashCodeJoueur)
+      .get()
+      .then((querySnapshot) {
+    if (querySnapshot.size > 0) {
+      var joueurDocRef = querySnapshot.docs[0].reference;
+
+      // Accéder à la sous-collection onlinePart
+      final onlinePartRef = joueurDocRef.collection('onlinePart');
+
+      // Récupérer les données de la liste tableData
+      onlinePartRef.doc('tableData').get().then((documentSnapshot) {
+        if (documentSnapshot.exists) {
+          // Les données de la liste tableData existent
+
+          // Récupérer les valeurs de la liste
+          var tableData = documentSnapshot.data()?['tableData'];
+
+          // Utilisez tableData selon vos besoins
+          print(tableData);
+        } else {
+          // Les données de la liste tableData n'existent pas
+          print("Aucune donnée trouvée dans la liste tableData.");
+        }
+      }).catchError((error) {
+        print("Une erreur s'est produite : $error");
+      });
+    } else {
+      print("Joueur non trouvé pour le hashCode donné");
+    }
+  }).catchError((error) {
+    print("Une erreur s'est produite : $error");
+  });
+}
+
+// Fonction pour gérer le clic sur le bouton (à déclencher lors du clic)
+void lorsqueLeBoutonEstClique() {
+  String hashCodeJoueur = hashCode;
+  recupererDonneesDeTable(hashCodeJoueur);
+}
 }

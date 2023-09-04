@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:songhogame/models/online_page.dart';
-import 'package:songhogame/widget/player1.dart';
+import 'package:songhogame/widget/player1C.dart';
 import 'package:songhogame/widget/player2.dart';
 
 class GameInfoBar extends StatelessWidget {
@@ -22,10 +21,10 @@ class GameInfoBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Player1(
+          Player1C(
             icon: Icons.person,
             score: scorePlayer,
-            playerName: usernameP1,
+            playerName: 'Vous',
           ),
           Container(
             padding: EdgeInsets.all(8), // Espacement interne du cadre

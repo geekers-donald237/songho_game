@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:songhogame/constants.dart';
 import 'package:songhogame/controller/gameController.dart';
-import 'package:songhogame/models/dataOnline.dart';
+import 'package:songhogame/controller/internet.dart';
 import 'package:songhogame/models/online_page.dart';
 import 'package:songhogame/widget/custom_app_bar.dart';
 import 'package:songhogame/widget/drawer.dart';
@@ -28,7 +28,8 @@ class _OnlineState extends State<Online> {
 
     // initialisation du plateau avec 5 billes par case
     _board = data;
-    _colorList = colorList;
+    _colorList = List<Color>.generate(14, (index) => Colors.grey[300]!);
+    ;
   }
 
   int score1 = 0;
@@ -119,30 +120,6 @@ class _OnlineState extends State<Online> {
                   ],
                 ),
               ),
-              /* Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: ShaderMask(
-                    blendMode: BlendMode.srcATop,
-                    shaderCallback: (Rect bounds) {
-                      return LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 218, 203, 162), // Couleur 1
-                          Color.fromARGB(255, 119, 95, 86), // Couleur 2
-                        ],
-                      ).createShader(bounds);
-                    },
-                    child: Text(
-                      "SONGHO GAME",
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[300],
-                      ),
-                    ),
-                  ),
-                ),
-              ), */
               Container(
                 child: GridView.count(
                   padding: EdgeInsets.all(30),
@@ -187,6 +164,7 @@ class _OnlineState extends State<Online> {
       if (((_board[(index + 1)] < 4) && (_board[(index + 1)] >= 2)) &&
           ((_board[(index + 2)] < 4) && (_board[(index + 2)] >= 2))) {
         _distributePawns(index);
+        checkInternet(context);
       } else {
         gameController.showSnackBar(context, "Impossible de jouer cette case");
       }
@@ -201,8 +179,9 @@ class _OnlineState extends State<Online> {
                     context, "Cette case ne vous appartient pas.");
               } else {
                 if (_board[index] != 0) {
-                  _updateDataOnFirestore();
+                  _updateMessageOnFirestore();
                   _distributePawns(index);
+                  checkInternet(context);
                   setState(() {
                     backgroundColor;
                     message = "Patientez J2.....";
@@ -220,8 +199,9 @@ class _OnlineState extends State<Online> {
                     context, "Cette case ne vous appartient pas.");
               } else {
                 if (_board[index] != 0) {
-                  _updateDataOnFirestore();
+                  _updateMessageOnFirestore();
                   _distributePawns(index);
+                  checkInternet(context);
                   setState(() {
                     message = "Patientez $u...";
                     statuts = u;
@@ -255,7 +235,7 @@ class _OnlineState extends State<Online> {
         .set({'tableData': data}, SetOptions(merge: true));
   }
 
-  void _updateDataOnFirestore() {
+  void _updateMessageOnFirestore() {
     FirebaseFirestore.instance
         .collection('players')
         .doc(user.uid)
@@ -267,64 +247,6 @@ class _OnlineState extends State<Online> {
       'statut_joueur': statut_joueur,
     });
   }
-
-  /* void _onTapCell(int index) {
-    if ((index == 0 || index == 7) && (_board[index] == 1)) {
-      gameController.showSnackBar(context, "Impossible de jouer cette case");
-    } else if ((index == 0 || index == 7) && (_board[index] == 2)) {
-      if (((_board[(index + 1)] < 4) && (_board[(index + 1)] >= 2)) &&
-          ((_board[(index + 2)] < 4) && (_board[(index + 2)] >= 2))) {
-        _distributePawns(index);
-      } else {
-        gameController.showSnackBar(context, "Impossible de jouer cette case");
-      }
-    } else {
-      setState(() {
-        if (_jeuEstEnCours == false) {
-          if (statuts == u) {
-            if (index >= 0 && index <= 6) {
-              statut_joueur = 0;
-              gameController.showSnackBar(
-                  context, "Cette case ne vous appartient pas.");
-            } else {
-              if (_board[index] != 0) {
-                _distributePawns(index);
-                setState(() {
-                  message = "Patientez J2.....";
-                  statuts = "J2";
-                });
-              } else {
-                gameController.showSnackBar(
-                    context, "Selectionner une case contenant des pions");
-              }
-            }
-          } else {
-            statut_joueur = 0;
-            if (index >= 7 && index <= 13) {
-              gameController.showSnackBar(
-                  context, "Cette case ne vous appartient pas.");
-            } else {
-              if (_board[index] != 0) {
-                _distributePawns(index);
-                setState(() {
-                  message = "Patientez $u...";
-                  statuts = u;
-                });
-              } else {
-                gameController.showSnackBar(
-                    context, "Selectionner une case contenant des pions");
-              }
-            }
-          }
-        } else {
-          gameController.showSnackBar(
-            context,
-            "Veuillez patienter....",
-          );
-        }
-      });
-    }
-  } */
 
   Future<void> _distributePawns(int index) async {
     int pawns = _board[index];
@@ -352,6 +274,8 @@ class _OnlineState extends State<Online> {
         _colorList[currentIndex] = Colors.blue;
         _colorList[currentIndex] = Colors.grey[300]!;
       });
+      _updateCellOnFirestore(data);
+      checkInternet(context);
     }
 
     if (((index >= 0 && index <= 6) &&
@@ -387,12 +311,15 @@ class _OnlineState extends State<Online> {
 
       setState(() {
         if (statuts == u) {
-          _updateDataOnFirestore();
+          _updateMessageOnFirestore();
+          checkInternet(context);
           message = "$u à vous de Jouer";
-          _updateDataOnFirestore();
+          _updateMessageOnFirestore();
+          checkInternet(context);
         } else {
           message = "J2 à vous de Jouer";
-          _updateDataOnFirestore();
+          _updateMessageOnFirestore();
+          checkInternet(context);
         }
       });
 
@@ -409,6 +336,8 @@ class _OnlineState extends State<Online> {
             score1 = score1 + _board[currentIndex];
             gameController.playSound('prise.mp3');
             _board[currentIndex] = 0;
+            _updateFirestoreScore();
+            checkInternet(context);
           }
         } else if (statuts == u && currentIndex >= 7 && currentIndex <= 13) {
           // Vérifier que la case actuelle appartient au joueur 2
@@ -418,6 +347,8 @@ class _OnlineState extends State<Online> {
 
             gameController.playSound('prise.mp3');
             _board[currentIndex] = 0;
+            _updateFirestoreScore();
+            checkInternet(context);
           }
         }
       });
@@ -435,11 +366,12 @@ class _OnlineState extends State<Online> {
 
     setState(() {
       if (statuts == u) {
+        _updateMessageOnFirestore();
         message = "$u à vous de Jouer";
-        _updateDataOnFirestore();
+        _updateMessageOnFirestore();
       } else {
         message = "J2 vous de Jouer";
-        _updateDataOnFirestore();
+        _updateMessageOnFirestore();
       }
     });
 
@@ -495,11 +427,12 @@ class _OnlineState extends State<Online> {
         }
       },
     );
-    _updateFirestoreData();
+    _updateFirestoreScore();
+    checkInternet(context);
   }
 
 // Sauvegarder les scores sur firebase
-  void _updateFirestoreData() {
+  void _updateFirestoreScore() {
     FirebaseFirestore.instance
         .collection('players')
         .doc(user.uid)
@@ -536,27 +469,6 @@ class _OnlineState extends State<Online> {
       ),
     );
   }
-
-/* Future<String> fetchUsernameP1() async {
-  String usernameP1 = '';
-
-  try {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('players')
-        .doc(user.uid) // Remplacez 'userID' par l'identifiant de l'utilisateur dont vous souhaitez récupérer le usernameP1
-        .get();
-
-    if (snapshot.exists) {
-      usernameP1 = snapshot.data()!['usernameP1']
-    } else {
-      usernameP1 = 'Utilisateur non trouvé';
-    }
-  } catch (e) {
-    usernameP1 = 'Erreur de récupération';
-  }
-
-  return usernameP1;
-} */
 
   Future<void> retrieveFirebaseTable(String uid) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;

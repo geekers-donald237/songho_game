@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:songhogame/widget/custom_app_bar.dart';
 
-class Player2 extends StatelessWidget {
+class Player1C extends StatelessWidget {
   final int score;
   final IconData icon;
   final String playerName;
 
-  const Player2({
+  const Player1C({
     Key? key,
     required this.score,
     required this.icon,
@@ -15,7 +16,7 @@ class Player2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.red,
+      color: Colors.blue,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
@@ -39,7 +40,7 @@ class Player2 extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 28,
-                color: Colors.red,
+                color: Colors.blue,
               ),
             ),
             Expanded(
@@ -47,18 +48,21 @@ class Player2 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    playerName,
+                    'Vous',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
+                  SizedBox(
+                    height: 4,
+                  ),
                   Text(
                     'Score: $score',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],

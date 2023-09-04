@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBNdU1lMK5wsmFHQD9MocniKXsb_vOseVU',
-    appId: '1:649644788637:android:6770a8d0d517ca32403d74',
-    messagingSenderId: '649644788637',
-    projectId: 'songhogame',
-    storageBucket: 'songhogame.appspot.com',
+    apiKey: 'AIzaSyDtaTF2t5waaiK5SBP_xWqu2mkt6_OvXns',
+    appId: '1:50221031304:android:b6255a98cc415e8310643d',
+    messagingSenderId: '50221031304',
+    projectId: 'songho-311fc',
+    storageBucket: 'songho-311fc.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBVgeUeYqhJrrQD_7osda8Pi57i1TZlvVg',
-    appId: '1:649644788637:ios:f44234990c9b0d80403d74',
-    messagingSenderId: '649644788637',
-    projectId: 'songhogame',
-    storageBucket: 'songhogame.appspot.com',
-    iosClientId: '649644788637-j1oe306h9qmjdjoukf62i0dnjovsea8f.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAJi0e3z79NrsMeugA9FTc48GFeyMM7Oac',
+    appId: '1:50221031304:ios:776f273faded664410643d',
+    messagingSenderId: '50221031304',
+    projectId: 'songho-311fc',
+    storageBucket: 'songho-311fc.appspot.com',
+    iosClientId: '50221031304-0om2m0e581g07vtf7k08rdl3lautbgh0.apps.googleusercontent.com',
     iosBundleId: 'com.example.songhogame',
   );
 }
