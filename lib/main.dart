@@ -15,10 +15,6 @@ void main() async {
       Get.put(AuthController());
     },
   );
-  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // WidgetsFlutterBinding.ensureInitialized();
-  //SharedPreferences prefs = await SharedPreferences.getInstance();
-  //bool isLooked = prefs.getBool('isLooked') ?? false;
   runApp(MyApp());
 }
 
@@ -27,7 +23,6 @@ class MyApp extends StatelessWidget {
 
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

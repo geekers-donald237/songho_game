@@ -197,6 +197,19 @@ class _MenuJeuState extends State<MenuJeu> {
             ),
           ),
         ),
+        floatingActionButton: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 16.0),
+              child: FloatingActionButton(
+                onPressed: () {},
+                child: Icon(Icons.rule_sharp, color: Colors.white,),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
