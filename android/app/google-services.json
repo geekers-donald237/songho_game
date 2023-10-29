@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "50221031304",
-    "project_id": "songho-311fc",
-    "storage_bucket": "songho-311fc.appspot.com"
+    "project_number": "1081172219671",
+    "project_id": "songhogame-397710",
+    "storage_bucket": "songhogame-397710.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:50221031304:android:b6255a98cc415e8310643d",
+        "mobilesdk_app_id": "1:1081172219671:android:3072dbecee250cb3a40952",
         "android_client_info": {
-          "package_name": "com.example.songhogame"
+          "package_name": "com.aloatech.songhogame"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "50221031304-l6vf9kkn5duap0iqv8t79a938gc9sikq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDtaTF2t5waaiK5SBP_xWqu2mkt6_OvXns"
+          "current_key": "AIzaSyDTqIfIqW8T0XYff3PBAVtTa_MqcOCj_k4"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "50221031304-l6vf9kkn5duap0iqv8t79a938gc9sikq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

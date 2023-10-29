@@ -40,6 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_easyloading: ^3.0.5
   shared_preferences: ^2.2.0
+  flutter_rename_app_plus3: ^1.2.1
 
 
   flutter:
@@ -59,10 +60,23 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.13.0"
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/images/
+  image: assets/images/songho_board.png
+  #branding: assets/logo/logo.png
+  color_dark: "#121212"
+  image_dark: assets/images/songho_board.png
+  branding_dark: assets/images/songho_board.png
+
+  android_12:
+    image: assets/images/songho_board.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/images/songho_board.png
+    icon_background_color_dark: "#121212"
+
+  web: false
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -76,40 +90,22 @@ flutter_native_splash:
 
 # The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
     - assets/
   #   - images/a_dot_ham.jpeg
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
+flutter_rename_app_plus:
+  application_name: Songho game
+  application_id: com.aloatech.songhogame
+  bundle_id: com.aloatech.songhogame
+  ios_bundle_name: Songho game
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/songho_board.png"
+  adaptive_icon_foreground: "assets/images/songho_board.png"

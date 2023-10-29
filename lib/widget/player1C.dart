@@ -23,7 +23,7 @@ class Player1C extends StatelessWidget {
       elevation: 4,
       child: Container(
         width: 120,
-        height: 50,
+        height: 60,
         padding: EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -39,7 +39,7 @@ class Player1C extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                size: 28,
+                size: 26,
                 color: Colors.blue,
               ),
             ),

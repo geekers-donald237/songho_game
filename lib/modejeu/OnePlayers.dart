@@ -77,7 +77,7 @@ class _OnePlayersState extends State<OnePlayers> {
               ),
               Container(
                 child: GridView.count(
-                    padding: EdgeInsets.all(30),
+                    padding: EdgeInsets.all(20),
                     primary: false,
                     shrinkWrap: true,
                     crossAxisCount: 7,
